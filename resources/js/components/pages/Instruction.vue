@@ -16,26 +16,13 @@
                 <select
                   class="form-select fs-4"
                   name="type"
-                  v-if="
-                    this.$route.params.type == 'LI' ||
-                    this.$route.params.type == undefined
-                  "
+                  v-model="instructionType"
                 >
                   <option value="LI" selected>
                     <i class="fa-solid fa-truck"></i>
                     Logistic Instruction
                   </option>
                   <option value="SI">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                    Service Instruction
-                  </option>
-                </select>
-                <select class="form-select fs-4" name="type" v-else>
-                  <option value="LI">
-                    <i class="fa-solid fa-truck"></i>
-                    Logistic Instruction
-                  </option>
-                  <option value="SI" selected>
                     <i class="fa fa-user" aria-hidden="true"></i>
                     Service Instruction
                   </option>
@@ -315,9 +302,14 @@
                         required
                       >
                         <option disabled selected hidden>Select Item</option>
-                        <option data-tokens="china">China</option>
-                        <option data-tokens="malayasia">Malayasia</option>
-                        <option data-tokens="singapore">Singapore</option>
+                        <option
+                          v-for="(item, index) in transactions"
+                          :key="index"
+                          :data-tokens="item.no"
+                          :value="item.no"
+                        >
+                          {{ item.no }}
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -350,6 +342,11 @@ import Dropdown from "../partials/Dropdown.vue";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+  data() {
+    return {
+      instructionType: null
+    }
+  },
   components: { Dropdown },
   props: ["type"],
   computed: {
@@ -357,17 +354,34 @@ export default {
       vendors: "getVendors",
       invoiceTargets: "getInvoiceTargets",
       customers: "getCustomers",
+      transactions: "getTransactions",
     }),
   },
   methods: {
-    ...mapActions(["fetchVendors", "fetchInvoiceTargets", "fetchCustomers"]),
+    ...mapActions(["fetchVendors", "fetchInvoiceTargets", "fetchCustomers", "fetchTransactionsForSI", "fetchTransactionsForLI"]),
   },
   beforeMount() {
     this.$store.dispatch("fetchVendors");
     this.$store.dispatch("fetchInvoiceTargets");
     this.$store.dispatch("fetchCustomers");
+
+    if(this.$route.params.type === 'SI') {
+      this.instructionType = 'SI';
+    } else {
+      this.instructionType = 'LI';
+    }
   },
   mounted() {},
+  watch: {
+    instructionType: function(val) {
+      if(val === 'SI'){
+        this.$store.dispatch("fetchTransactionsForSI");
+      }
+      if(val === 'LI'){
+        this.$store.dispatch("fetchTransactionsForLI");
+      }
+    }
+  }
 };
 </script>
 

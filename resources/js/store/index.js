@@ -9,11 +9,13 @@ export default new Vuex.Store({
         vendors: null,
         invoiceTargets: null,
         customers: null,
+        transactions: null,
     },
     getters: {
         getVendors: (state) => state.vendors,
         getInvoiceTargets: (state) => state.invoiceTargets,
         getCustomers: (state) => state.customers,
+        getTransactions: (state) => state.transactions,
     },
     actions: {
         async fetchVendors({ commit }) {
@@ -43,6 +45,24 @@ export default new Vuex.Store({
                 console.log(error);
             }
         },
+        async fetchTransactionsForLI({ commit }) {
+            try {
+                const data = await axios.get('/api/transactions?instructionType=LI');
+                commit("SET_TRANSACTIONS", data.data.data);
+            } catch (error) {
+                alert(error);
+                console.log(error);
+            }
+        },
+        async fetchTransactionsForSI({ commit }) {
+            try {
+                const data = await axios.get('/api/transactions?instructionType=SI');
+                commit("SET_TRANSACTIONS", data.data.data);
+            } catch (error) {
+                alert(error);
+                console.log(error);
+            }
+        },
     },
     mutations: {
         SET_VENDORS(state, vendors) {
@@ -54,6 +74,9 @@ export default new Vuex.Store({
         SET_CUSTOMERS(state, customers) {
             state.customers = customers;
         },
+        SET_TRANSACTIONS(state, transactions) {
+            state.transactions = transactions;
+        }
     },
     modules: {},
 });

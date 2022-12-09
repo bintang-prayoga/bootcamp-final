@@ -6548,18 +6548,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      instructionType: null
+    };
+  },
   components: {
     Dropdown: _partials_Dropdown_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
@@ -6567,15 +6564,31 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)({
     vendors: "getVendors",
     invoiceTargets: "getInvoiceTargets",
-    customers: "getCustomers"
+    customers: "getCustomers",
+    transactions: "getTransactions"
   })),
-  methods: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)(["fetchVendors", "fetchInvoiceTargets", "fetchCustomers"])),
+  methods: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)(["fetchVendors", "fetchInvoiceTargets", "fetchCustomers", "fetchTransactionsForSI", "fetchTransactionsForLI"])),
   beforeMount: function beforeMount() {
     this.$store.dispatch("fetchVendors");
     this.$store.dispatch("fetchInvoiceTargets");
     this.$store.dispatch("fetchCustomers");
+    if (this.$route.params.type === 'SI') {
+      this.instructionType = 'SI';
+    } else {
+      this.instructionType = 'LI';
+    }
   },
-  mounted: function mounted() {}
+  mounted: function mounted() {},
+  watch: {
+    instructionType: function instructionType(val) {
+      if (val === 'SI') {
+        this.$store.dispatch("fetchTransactionsForSI");
+      }
+      if (val === 'LI') {
+        this.$store.dispatch("fetchTransactionsForLI");
+      }
+    }
+  }
 });
 
 /***/ }),
@@ -7135,7 +7148,8 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
   state: {
     vendors: null,
     invoiceTargets: null,
-    customers: null
+    customers: null,
+    transactions: null
   },
   getters: {
     getVendors: function getVendors(state) {
@@ -7146,6 +7160,9 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
     },
     getCustomers: function getCustomers(state) {
       return state.customers;
+    },
+    getTransactions: function getTransactions(state) {
+      return state.transactions;
     }
   },
   actions: {
@@ -7235,6 +7252,64 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
           }
         }, _callee3, null, [[1, 8]]);
       }))();
+    },
+    fetchTransactionsForLI: function fetchTransactionsForLI(_ref4) {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var commit, data;
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                commit = _ref4.commit;
+                _context4.prev = 1;
+                _context4.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/transactions?instructionType=LI');
+              case 4:
+                data = _context4.sent;
+                commit("SET_TRANSACTIONS", data.data.data);
+                _context4.next = 12;
+                break;
+              case 8:
+                _context4.prev = 8;
+                _context4.t0 = _context4["catch"](1);
+                alert(_context4.t0);
+                console.log(_context4.t0);
+              case 12:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[1, 8]]);
+      }))();
+    },
+    fetchTransactionsForSI: function fetchTransactionsForSI(_ref5) {
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+        var commit, data;
+        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                commit = _ref5.commit;
+                _context5.prev = 1;
+                _context5.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/transactions?instructionType=SI');
+              case 4:
+                data = _context5.sent;
+                commit("SET_TRANSACTIONS", data.data.data);
+                _context5.next = 12;
+                break;
+              case 8:
+                _context5.prev = 8;
+                _context5.t0 = _context5["catch"](1);
+                alert(_context5.t0);
+                console.log(_context5.t0);
+              case 12:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, null, [[1, 8]]);
+      }))();
     }
   },
   mutations: {
@@ -7246,6 +7321,9 @@ vue__WEBPACK_IMPORTED_MODULE_1__["default"].use(vuex__WEBPACK_IMPORTED_MODULE_2_
     },
     SET_CUSTOMERS: function SET_CUSTOMERS(state, customers) {
       state.customers = customers;
+    },
+    SET_TRANSACTIONS: function SET_TRANSACTIONS(state, transactions) {
+      state.transactions = transactions;
     }
   },
   modules: {}
@@ -12524,7 +12602,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.btn-draft {\r\n  border: none;\r\n  height: 35px;\r\n  width: 150px;\r\n  border-radius: 20px;\n}\noption {\r\n  cursor: pointer;\n}\r\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.btn-draft {\n  border: none;\n  height: 35px;\n  width: 150px;\n  border-radius: 20px;\n}\noption {\n  cursor: pointer;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12596,7 +12674,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\ntr:hover {\n  color: aqua;\n  cursor: pointer;\n}\n.bg-muted {\n  background-color: #dddddd !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\ntr:hover {\r\n  color: aqua;\r\n  cursor: pointer;\n}\n.bg-muted {\r\n  background-color: #dddddd !important;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -31949,27 +32027,40 @@ var render = function () {
             _c("form", { attrs: { action: "", method: "post" } }, [
               _c("div", { staticClass: "row justify-content-between" }, [
                 _c("div", { staticClass: "col-md-3 justify-content-start" }, [
-                  this.$route.params.type == "LI" ||
-                  this.$route.params.type == undefined
-                    ? _c(
-                        "select",
+                  _c(
+                    "select",
+                    {
+                      directives: [
                         {
-                          staticClass: "form-select fs-4",
-                          attrs: { name: "type" },
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.instructionType,
+                          expression: "instructionType",
                         },
-                        [_vm._m(1), _vm._v(" "), _vm._m(2)]
-                      )
-                    : _c(
-                        "select",
-                        {
-                          staticClass: "form-select fs-4",
-                          attrs: { name: "type" },
+                      ],
+                      staticClass: "form-select fs-4",
+                      attrs: { name: "type" },
+                      on: {
+                        change: function ($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function (o) {
+                              return o.selected
+                            })
+                            .map(function (o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.instructionType = $event.target.multiple
+                            ? $$selectedVal
+                            : $$selectedVal[0]
                         },
-                        [_vm._m(3), _vm._v(" "), _vm._m(4)]
-                      ),
+                      },
+                    },
+                    [_vm._m(1), _vm._v(" "), _vm._m(2)]
+                  ),
                 ]),
                 _vm._v(" "),
-                _vm._m(5),
+                _vm._m(3),
               ]),
               _vm._v(" "),
               _c(
@@ -32076,7 +32167,7 @@ var render = function () {
                           )
                         }),
                         _vm._v(" "),
-                        _vm._m(6),
+                        _vm._m(4),
                       ],
                       2
                     ),
@@ -32184,11 +32275,72 @@ var render = function () {
                 1
               ),
               _vm._v(" "),
-              _vm._m(7),
+              _vm._m(5),
               _vm._v(" "),
-              _vm._m(8),
+              _c("div", { staticClass: "form-group mt-5" }, [
+                _c("div", { staticClass: "card mt-5 p-4" }, [
+                  _c("div", { staticClass: "card-body" }, [
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-3" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "form-control-label fs-4",
+                            attrs: { for: "" },
+                          },
+                          [_vm._v("Link To")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            staticClass: "form-control",
+                            attrs: {
+                              id: "select-link",
+                              "data-live-search": "true",
+                              required: "",
+                            },
+                          },
+                          [
+                            _c(
+                              "option",
+                              {
+                                attrs: {
+                                  disabled: "",
+                                  selected: "",
+                                  hidden: "",
+                                },
+                              },
+                              [_vm._v("Select Item")]
+                            ),
+                            _vm._v(" "),
+                            _vm._l(_vm.transactions, function (item, index) {
+                              return _c(
+                                "option",
+                                {
+                                  key: index,
+                                  attrs: { "data-tokens": item.no },
+                                  domProps: { value: item.no },
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                        " +
+                                      _vm._s(item.no) +
+                                      "\n                      "
+                                  ),
+                                ]
+                              )
+                            }),
+                          ],
+                          2
+                        ),
+                      ]),
+                    ]),
+                  ]),
+                ]),
+              ]),
               _vm._v(" "),
-              _vm._m(9),
+              _vm._m(6),
             ]),
           ]),
         ]),
@@ -32223,24 +32375,6 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("option", { attrs: { value: "SI" } }, [
-      _c("i", { staticClass: "fa fa-user", attrs: { "aria-hidden": "true" } }),
-      _vm._v("\n                  Service Instruction\n                "),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("option", { attrs: { value: "LI" } }, [
-      _c("i", { staticClass: "fa-solid fa-truck" }),
-      _vm._v("\n                  Logistic Instruction\n                "),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("option", { attrs: { value: "SI", selected: "" } }, [
       _c("i", { staticClass: "fa fa-user", attrs: { "aria-hidden": "true" } }),
       _vm._v("\n                  Service Instruction\n                "),
     ])
@@ -32521,57 +32655,6 @@ var staticRenderFns = [
                   attrs: { id: "notes", rows: "3" },
                 }),
               ]),
-            ]),
-          ]),
-        ]),
-      ]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group mt-5" }, [
-      _c("div", { staticClass: "card mt-5 p-4" }, [
-        _c("div", { staticClass: "card-body" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-3" }, [
-              _c(
-                "label",
-                { staticClass: "form-control-label fs-4", attrs: { for: "" } },
-                [_vm._v("Link To")]
-              ),
-              _vm._v(" "),
-              _c(
-                "select",
-                {
-                  staticClass: "form-control",
-                  attrs: {
-                    id: "select-link",
-                    "data-live-search": "true",
-                    required: "",
-                  },
-                },
-                [
-                  _c(
-                    "option",
-                    { attrs: { disabled: "", selected: "", hidden: "" } },
-                    [_vm._v("Select Item")]
-                  ),
-                  _vm._v(" "),
-                  _c("option", { attrs: { "data-tokens": "china" } }, [
-                    _vm._v("China"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { "data-tokens": "malayasia" } }, [
-                    _vm._v("Malayasia"),
-                  ]),
-                  _vm._v(" "),
-                  _c("option", { attrs: { "data-tokens": "singapore" } }, [
-                    _vm._v("Singapore"),
-                  ]),
-                ]
-              ),
             ]),
           ]),
         ]),
