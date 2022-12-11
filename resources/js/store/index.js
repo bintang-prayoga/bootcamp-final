@@ -24,6 +24,7 @@ export default new Vuex.Store({
         invoiceTargets: null,
         customers: null,
         transactions: null,
+        details: null,
     },
     getters: {
         getVendors: (state) => state.vendors,
@@ -31,7 +32,7 @@ export default new Vuex.Store({
         getCustomers: (state) => state.customers,
         getTransactions: (state) => state.transactions,
         getForm: (state) => state.form,
-        getIdSaved: (state) => state.idSaved,
+        getDetails: (state) => state.details,
     },
     actions: {
         async fetchVendors({ commit }) {
@@ -75,6 +76,14 @@ export default new Vuex.Store({
                 const data = await axios.get('/api/transactions?instructionType=SI');
                 commit("SET_TRANSACTIONS", data.data.data);
             } catch (error) {
+
+            }
+        },
+        async fetchDetails({ commit }, id) {
+            try {
+                const data = await axios.get("api/instructions/" + id);
+                commit("SET_DETAILS", data.data.data);
+            } catch (error) {
                 alert(error);
                 console.log(error);
             }
@@ -92,7 +101,10 @@ export default new Vuex.Store({
         },
         SET_TRANSACTIONS(state, transactions) {
             state.transactions = transactions;
-        }
+        },
+        SET_DETAILS(state, details) {
+            state.details = details;
+        },
     },
     modules: {},
 });
