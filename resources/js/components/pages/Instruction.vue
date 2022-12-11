@@ -10,13 +10,13 @@
       </p>
       <div class="container mt-5 p-5">
         <div class="">
-          <form action="" method="post">
+          <form v-on:submit.prevent="submitForm" method="post">
             <div class="row justify-content-between">
               <div class="col-md-3 justify-content-start">
                 <select
                   class="form-select fs-4"
                   name="type"
-                  v-model="instructionType"
+                  v-model="form.type"
                 >
                   <option value="LI" selected>
                     <i class="fa-solid fa-truck"></i>
@@ -35,108 +35,37 @@
 
             <div class="form-group row mt-5">
               <div class="col-2">
-                <label for="" class="form-control-label">Assigned Vendor</label>
-                <select
-                  class="form-control"
-                  id="select-vendor"
-                  data-live-search="true"
-                  required
-                >
-                  <option disabled selected hidden>Enter Vendor</option>
-                  <option
-                    v-for="(item, index) in vendors"
-                    :key="index"
-                    :data-tokens="item.name"
-                    :value="item.name"
-                  >
-                    {{ item.name }}
-                  </option>
-                </select>
+                <select-view id-name="vendors" :items="vendors" :field="'assigned_vendor'" data-key="name"  label="Assigned Vendor" placeholder="Enter Vendor"></select-view>
               </div>
               <text-input
                 column="col-2"
                 label="Attention Of"
                 placeholder="Enter Attention Of"
+                field="attention_of"
               />
               <text-input
                 column="col-2"
                 label="Quotation No."
                 placeholder="Enter Quotation"
+                field="quotation_no"
               />
               <div class="col-2">
-                <label for="" class="form-control-label">Invoice To</label>
-                <select
-                  class="form-control"
-                  id="select-invoice"
-                  data-live-search="true"
-                  required
-                >
-                  <option disabled selected hidden>Select an Option</option>
-                  <option
-                    v-for="(item, index) in invoiceTargets"
-                    :key="index"
-                    :data-tokens="item.name"
-                  >
-                    {{ item.name }}
-                  </option>
-                  <option>
-                    <button
-                      type="button"
-                      class="btn btn-outline-success"
-                      data-toggle="modal"
-                      data-target="#exampleModal"
-                    >
-                      <i class="fa fa-plus" aria-hidden="true"></i>
-                      Add New Invoice
-                    </button>
-                  </option>
-                </select>
+                <select-view id-name="invoice-to" :items="invoiceTargets" :field="'invoice_to'" data-key="name" label="Invoice To" placeholder="Select an Option"></select-view>
               </div>
               <div class="col-2">
-                <label for="" class="form-control-label"
-                  >Customer Contract</label
-                >
-                <select
-                  class="form-control"
-                  id="select-customer"
-                  data-live-search="true"
-                  required
-                >
-                  <option disabled selected hidden>Select Customer</option>
-                  <option
-                    v-for="(item, index) in customers"
-                    :key="index"
-                    :data-tokens="item.name"
-                  >
-                    {{ item.name }}
-                  </option>
-                </select>
+                <select-view id-name="customer" :items="customers" :field="'customer'" data-key="name" label="Customer Contract" placeholder="Select Customer"></select-view>
               </div>
             </div>
 
             <div class="form-group row mt-5">
               <div class="col-10">
-                <label for="" class="form-control-label">Vendor Address</label>
-                <select
-                  class="form-control"
-                  id="select-vendor-address"
-                  data-live-search="true"
-                  required
-                >
-                  <option disabled selected hidden>Enter Vendor Address</option>
-                  <option
-                    v-for="(item, index) in vendors"
-                    :key="index"
-                    :data-tokens="item.name"
-                  >
-                    {{ item.name }}
-                  </option>
-                </select>
+                <select-view id-name="vendor-address" :items="vendorAddresses" :field="'vendor_address'" label="Vendor Address" placeholder="Enter Vendor Address"></select-view>
               </div>
               <text-input
                 column="col-2"
                 label="Customer PO No."
                 placeholder="Enter Customer PO"
+                field="customer_po_no"
               />
             </div>
 
@@ -170,6 +99,7 @@
                               type="text"
                               class="form-control"
                               placeholder="Enter Description"
+                              v-model="form.costs[0].description"
                             />
                           </th>
                           <td>
@@ -177,13 +107,18 @@
                               type="text"
                               class="form-control"
                               placeholder="Enter QTY"
+                              v-model="form.costs[0].qty"
                             />
                           </td>
                           <td>
-                            <select class="form-select">
-                              <option value="1">One</option>
-                              <option value="2">Two</option>
-                              <option value="3">Three</option>
+                            <select class="form-select" v-model="form.costs[0].uom">
+                              <option value="SHP">SHP</option>
+                              <option value="BILL">BILL</option>
+                              <option value="HRS">HRS</option>
+                              <option value="MEN">MEN</option>
+                              <option value="PCS">PCS</option>
+                              <option value="TRIP">TRIP</option>
+                              <option value="MT">MT</option>
                             </select>
                           </td>
                           <td>
@@ -191,13 +126,14 @@
                               type="text"
                               class="form-control"
                               placeholder="Enter Unit Price"
+                              v-model="form.costs[0].unit_price"
                             />
                           </td>
                           <td>
-                            <input type="number" class="form-control" min="0" />
+                            <input type="number" class="form-control" min="0" v-model="form.costs[0].discount"/>
                           </td>
                           <th>
-                            <input type="number" class="form-control" min="0" />
+                            <input type="number" class="form-control" min="0" v-model="form.costs[0].vat"/>
                           </th>
                           <td>
                             <input
@@ -212,6 +148,7 @@
                               type="number"
                               step="0.00"
                               class="form-control"
+                              v-model="form.costs[0].vat_ammount"
                             />
                           </td>
                           <td>
@@ -219,6 +156,7 @@
                               type="number"
                               step="0.00"
                               class="form-control"
+                              v-model="form.costs[0].sub_total"
                             />
                           </td>
                           <td>
@@ -226,13 +164,13 @@
                               type="number"
                               step="0.00"
                               class="form-control"
+                              v-model="form.costs[0].total"
                             />
                           </td>
                           <td>
-                            <select class="form-select">
-                              <option value="1">One</option>
-                              <option value="2">Two</option>
-                              <option value="3">Three</option>
+                            <select class="form-select" v-model="form.costs[0].charge_to">
+                              <option value="Customer">Customer</option>
+                              <option value="Inosoft">Inosoft</option>
                             </select>
                           </td>
                           <td>
@@ -279,6 +217,7 @@
                           id="notes"
                           rows="3"
                           style="resize: none"
+                          v-model="form.note"
                         ></textarea>
                       </div>
                     </div>
@@ -292,25 +231,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-3">
-                      <label for="" class="form-control-label fs-4"
-                        >Link To</label
-                      >
-                      <select
-                        class="form-control"
-                        id="select-link"
-                        data-live-search="true"
-                        required
-                      >
-                        <option disabled selected hidden>Select Item</option>
-                        <option
-                          v-for="(item, index) in transactions"
-                          :key="index"
-                          :data-tokens="item.no"
-                          :value="item.no"
-                        >
-                          {{ item.no }}
-                        </option>
-                      </select>
+                      <select-view :is-required="false" id-name="transactions" :items="transactions" :field="'link_to'" data-key="no" label="Link To" placeholder="Select Item"></select-view>
                     </div>
                   </div>
                 </div>
@@ -338,27 +259,46 @@
 </template>
 
 <script>
-import Dropdown from "../partials/Dropdown.vue";
-import { mapGetters, mapActions } from "vuex";
+// import Dropdown from "../partials/Dropdown.vue";
+// import { mapFields } from "../../helpers";
+import SelectView from "../partials/SelectView.vue";
+import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
   data() {
     return {
-      instructionType: null
+      vendorAddresses: [],
     }
   },
-  components: { Dropdown },
-  props: ["type"],
+  components: { SelectView },
   computed: {
     ...mapGetters({
       vendors: "getVendors",
       invoiceTargets: "getInvoiceTargets",
       customers: "getCustomers",
       transactions: "getTransactions",
+      form: "getForm"
     }),
+
+    formCopy: function() {
+      return Object.assign({}, this.form);
+    }
   },
   methods: {
     ...mapActions(["fetchVendors", "fetchInvoiceTargets", "fetchCustomers", "fetchTransactionsForSI", "fetchTransactionsForLI"]),
+    submitForm(){
+      axios.post('/api/instructions', this.form, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
   },
   beforeMount() {
     this.$store.dispatch("fetchVendors");
@@ -366,19 +306,41 @@ export default {
     this.$store.dispatch("fetchCustomers");
 
     if(this.$route.params.type === 'SI') {
-      this.instructionType = 'SI';
+      this.form.type = 'SI';
     } else {
-      this.instructionType = 'LI';
+      this.form.type = 'LI';
     }
   },
-  mounted() {},
+  updated() {
+    if(this.form.vendor_address == '' && document.getElementById('vendor-address').selectedIndex != 0){
+      document.getElementById('vendor-address').selectedIndex = 0;
+    }
+
+    if(this.form.link_to == '' && document.getElementById('transactions').selectedIndex != 0){
+      document.getElementById('transactions').selectedIndex = 0;
+    }
+  },
   watch: {
-    instructionType: function(val) {
-      if(val === 'SI'){
-        this.$store.dispatch("fetchTransactionsForSI");
-      }
-      if(val === 'LI'){
-        this.$store.dispatch("fetchTransactionsForLI");
+    formCopy: {
+      deep:true,
+      handler(newValue, oldValue) {
+        if(newValue.type != oldValue.type) {
+          if(newValue.type === "SI") {
+            this.form.link_to = ""
+            this.$store.dispatch("fetchTransactionsForSI");
+          } else if(newValue.type === "LI") {
+            this.form.link_to = ""
+            this.$store.dispatch("fetchTransactionsForLI");
+          }
+        }
+
+        if(newValue.assigned_vendor != oldValue.assigned_vendor){
+            let vendorIndex = document.getElementById('vendors').selectedIndex;
+            if(vendorIndex !== 0) {
+                this.form.vendor_address = '';
+                this.vendorAddresses = this.vendors[vendorIndex - 1].addresses;
+            }
+        }
       }
     }
   }

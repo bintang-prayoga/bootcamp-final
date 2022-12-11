@@ -6,6 +6,20 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+        form: {
+            type: '',
+            assigned_vendor: '',
+            attention_of: '',
+            quotation_no: '',
+            vendor_address: '',
+            invoice_to: '',
+            customer: '',
+            customer_po_no: '',
+            costs: [{}],
+            attachments: [],
+            note: '',
+            link_to: '',
+        },
         vendors: null,
         invoiceTargets: null,
         customers: null,
@@ -16,6 +30,8 @@ export default new Vuex.Store({
         getInvoiceTargets: (state) => state.invoiceTargets,
         getCustomers: (state) => state.customers,
         getTransactions: (state) => state.transactions,
+        getForm: (state) => state.form,
+        getIdSaved: (state) => state.idSaved,
     },
     actions: {
         async fetchVendors({ commit }) {
