@@ -180,7 +180,7 @@
                             </select>
                           </td>
                           <td>
-                            <button type="button" class="btn btn-secondary">
+                            <button type="button" class="btn btn-secondary" @click="removeCost(index)">
                               <i class="fa fa-minus" aria-hidden="true"></i>
                             </button>
                           </td>
@@ -305,6 +305,10 @@ export default {
 
     addCost(){
       this.form.costs.push({});
+    },
+
+    removeCost(index){
+      this.form.costs.splice(index, 1);
     },
 
     submitForm(){
