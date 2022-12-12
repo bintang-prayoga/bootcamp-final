@@ -93,25 +93,26 @@
                         <th scope="col" class="fs-4"></th>
                       </thead>
                       <tbody>
-                        <tr>
+                        <tr v-for="(value, index) in form.costs">
                           <th>
                             <input
                               type="text"
                               class="form-control"
                               placeholder="Enter Description"
-                              v-model="form.costs[0].description"
+                              v-model="form.costs[index].description"
                             />
                           </th>
                           <td>
                             <input
-                              type="text"
+                              type="number"
+                              min="0"
                               class="form-control"
                               placeholder="Enter QTY"
-                              v-model="form.costs[0].qty"
+                              v-model="form.costs[index].qty"
                             />
                           </td>
                           <td>
-                            <select class="form-select" v-model="form.costs[0].uom">
+                            <select class="form-select" v-model="form.costs[index].uom">
                               <option value="SHP">SHP</option>
                               <option value="BILL">BILL</option>
                               <option value="HRS">HRS</option>
@@ -123,17 +124,19 @@
                           </td>
                           <td>
                             <input
-                              type="text"
+                              type="number"
+                              step="0.001"
+                              min="0"
                               class="form-control"
                               placeholder="Enter Unit Price"
-                              v-model="form.costs[0].unit_price"
+                              v-model="form.costs[index].unit_price"
                             />
                           </td>
                           <td>
-                            <input type="number" class="form-control" min="0" v-model="form.costs[0].discount"/>
+                            <input type="number" class="form-control" min="0" max="100" v-model="form.costs[index].discount"/>
                           </td>
                           <th>
-                            <input type="number" class="form-control" min="0" v-model="form.costs[0].vat"/>
+                            <input type="number" class="form-control" min="0" max="100" v-model="form.costs[index].vat"/>
                           </th>
                           <td>
                             <input
@@ -148,7 +151,8 @@
                               type="number"
                               step="0.00"
                               class="form-control"
-                              v-model="form.costs[0].vat_ammount"
+                              disabled
+                              v-model="form.costs[index].vat_ammount"
                             />
                           </td>
                           <td>
@@ -156,7 +160,8 @@
                               type="number"
                               step="0.00"
                               class="form-control"
-                              v-model="form.costs[0].sub_total"
+                              disabled
+                              v-model="form.costs[index].sub_total"
                             />
                           </td>
                           <td>
@@ -164,11 +169,12 @@
                               type="number"
                               step="0.00"
                               class="form-control"
-                              v-model="form.costs[0].total"
+                              disabled
+                              v-model="form.costs[index].total"
                             />
                           </td>
                           <td>
-                            <select class="form-select" v-model="form.costs[0].charge_to">
+                            <select class="form-select" v-model="form.costs[index].charge_to">
                               <option value="Customer">Customer</option>
                               <option value="Inosoft">Inosoft</option>
                             </select>
@@ -183,10 +189,10 @@
                       <tfoot>
                         <tr>
                           <td colspan="6"></td>
-                          <td class="fs-4">USD(Total)</td>
-                          <td class="fs-4">0.00</td>
-                          <td class="fs-4">0.00</td>
-                          <td class="fs-4">0.00</td>
+                          <td class="fs-4">USD (Total)</td>
+                          <td class="fs-4" id="total-of-vat">{{ total.vat }}</td>
+                          <td class="fs-4" id="total-of-subtotal">{{ total.sub }}</td>
+                          <td class="fs-4" id="total-of-total">{{ total.total }}</td>
                           <td colspan="2">
                             <div id="button" class="float-end">
                               <div id="button_container_1">
@@ -259,8 +265,6 @@
 </template>
 
 <script>
-// import Dropdown from "../partials/Dropdown.vue";
-// import { mapFields } from "../../helpers";
 import SelectView from "../partials/SelectView.vue";
 import { mapGetters, mapActions, mapState } from "vuex";
 
@@ -282,6 +286,18 @@ export default {
 
     formCopy: function() {
       return Object.assign({}, this.form);
+    },
+
+    costs: function() {
+      return JSON.stringify(this.form.costs);
+    },
+
+    total: function() {
+      return {
+        sub: this.form.costs.reduce((current, previous) => {return current + parseFloat(previous.sub_total ?? 0)}, 0).toFixed(2),
+        vat: this.form.costs.reduce((current, previous) => {return current + parseFloat(previous.vat_ammount ?? 0)}, 0).toFixed(2),
+        total: this.form.costs.reduce((current, previous) => {return current + parseFloat(previous.total ?? 0)}, 0).toFixed(2)
+      }
     }
   },
   methods: {
@@ -342,7 +358,42 @@ export default {
             }
         }
       }
-    }
+    },
+    costs: {
+      deep:true,
+      handler(newValueSerialize, oldValueSerialize) {
+        let newValue = JSON.parse(newValueSerialize);
+        let oldValue = JSON.parse(oldValueSerialize);
+
+        for(let i = 0; i < newValue.length; i++) {
+          if(!!newValue[i].qty && !!newValue[i].unit_price) {
+            if(newValue[i].qty != oldValue[i].qty || newValue[i].unit_price != oldValue[i].unit_price || newValue[i].discount != oldValue[i].discount){
+              let subTotal = newValue[i].qty * newValue[i].unit_price
+              if(!!newValue[i].discount){
+                subTotal -= subTotal * (newValue[i].discount/100);
+              }
+              newValue[i]['sub_total'] = subTotal;
+            }
+          }
+
+          if(!!newValue[i].sub_total){
+            if(newValue[i].vat != oldValue[i].vat){
+                let vatAmmount = (newValue[i].vat/100) * newValue[i].sub_total;
+                newValue[i]['vat_ammount'] = vatAmmount;
+            }
+          }
+
+          if((!!newValue[i].sub_total && !!newValue[i].vat_ammount) && (newValue[i].sub_total != oldValue[i].sub_total || newValue[i].vat_ammount != oldValue[i].vat_ammount)) {
+            let total = newValue[i].sub_total + newValue[i].vat_ammount;
+            newValue[i]['total'] = total;
+          }
+        }
+
+        if(JSON.stringify(this.form.costs) != JSON.stringify(newValue)){
+            this.form.costs = newValue;
+        }
+      }
+    },
   }
 };
 </script>
