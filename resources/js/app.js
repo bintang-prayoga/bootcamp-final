@@ -31,12 +31,8 @@ Vue.component(
     require("./components/partials/ModalInvoice.vue").default
 );
 Vue.component(
-    "Dropdown",
-    require("./components/partials/Dropdown.vue").default
-);
-Vue.component(
-    "TextInput",
-    require("./components/partials/TextInput.vue").default
+    "Input",
+    require("./components/partials/Input.vue").default
 );
 Vue.component(
     "TableComp",

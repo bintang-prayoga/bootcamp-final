@@ -35,33 +35,36 @@
 
             <div class="form-group row mt-5">
               <div class="col-2">
-                <select-view id-name="vendors" :items="vendors" :field="'assigned_vendor'" data-key="name"  label="Assigned Vendor" placeholder="Enter Vendor"></select-view>
+                <Select id="vendors" :items="vendors" :field="'assigned_vendor'" data-key="name"  label="Assigned Vendor" placeholder="Enter Vendor"></Select>
               </div>
-              <text-input
+              <Input
+                id="attention-of"
                 column="col-2"
                 label="Attention Of"
                 placeholder="Enter Attention Of"
                 field="attention_of"
               />
-              <text-input
+              <Input
+                id="quotation-no"
                 column="col-2"
                 label="Quotation No."
                 placeholder="Enter Quotation"
                 field="quotation_no"
               />
               <div class="col-2">
-                <select-view id-name="invoice-to" :items="invoiceTargets" :field="'invoice_to'" data-key="name" label="Invoice To" placeholder="Select an Option"></select-view>
+                <Select id="invoice-to" :items="invoiceTargets" :field="'invoice_to'" data-key="name" label="Invoice To" placeholder="Select an Option"></Select>
               </div>
               <div class="col-2">
-                <select-view id-name="customer" :items="customers" :field="'customer'" data-key="name" label="Customer Contract" placeholder="Select Customer"></select-view>
+                <Select id="customer" :items="customers" :field="'customer'" data-key="name" label="Customer Contract" placeholder="Select Customer"></Select>
               </div>
             </div>
 
             <div class="form-group row mt-5">
               <div class="col-10">
-                <select-view id-name="vendor-address" :items="vendorAddresses" :field="'vendor_address'" label="Vendor Address" placeholder="Enter Vendor Address"></select-view>
+                <Select id="vendor-address" :items="vendorAddresses" :field="'vendor_address'" label="Vendor Address" placeholder="Enter Vendor Address"></Select>
               </div>
-              <text-input
+              <Input
+                id="customer-po-no"
                 column="col-2"
                 label="Customer PO No."
                 placeholder="Enter Customer PO"
@@ -125,19 +128,31 @@
                           <td>
                             <input
                               type="number"
-                              step="0.001"
                               min="0"
+                              step=".001"
                               class="form-control"
                               placeholder="Enter Unit Price"
                               v-model="form.costs[index].unit_price"
                             />
                           </td>
                           <td>
-                            <input type="number" class="form-control" min="0" max="100" v-model="form.costs[index].discount"/>
+                            <input
+                              type="number"
+                              class="form-control"
+                              min="0"
+                              max="100"
+                              v-model="form.costs[index].discount"
+                            />
                           </td>
-                          <th>
-                            <input type="number" class="form-control" min="0" max="100" v-model="form.costs[index].vat"/>
-                          </th>
+                          <td>
+                            <input
+                              type="number"
+                              class="form-control"
+                              min="0"
+                              max="100"
+                              v-model="form.costs[index].vat"
+                            />
+                          </td>
                           <td>
                             <input
                               type="text"
@@ -237,7 +252,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-3">
-                      <select-view :is-required="false" id-name="transactions" :items="transactions" :field="'link_to'" data-key="no" label="Link To" placeholder="Select Item"></select-view>
+                      <Select :is-required="false" id="transactions" :items="transactions" :field="'link_to'" data-key="no" label="Link To" placeholder="Select Item"></Select>
                     </div>
                   </div>
                 </div>
@@ -265,7 +280,7 @@
 </template>
 
 <script>
-import SelectView from "../partials/SelectView.vue";
+import Select from "../partials/Select.vue";
 import { mapGetters, mapActions, mapState } from "vuex";
 
 export default {
@@ -274,7 +289,7 @@ export default {
       vendorAddresses: [],
     }
   },
-  components: { SelectView },
+  components: { Select },
   computed: {
     ...mapGetters({
       vendors: "getVendors",

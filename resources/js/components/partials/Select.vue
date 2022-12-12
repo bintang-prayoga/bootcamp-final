@@ -1,16 +1,16 @@
 <template>
     <div>
-        <label :for="idName" class="form-control-label">{{ label }}</label>
+        <label :for="id" class="form-control-label">{{ label }}</label>
         <select
             class="form-control"
-            :id="idName"
+            :id="id"
             data-live-search="true"
             :required="!!isRequired"
-            v-model="model"
+            v-model="$store.state.form[field]"
         >
             <option disabled hidden value="">{{ placeholder }}</option>
             <option
-            v-if="dataKey !== ''"
+            v-if="!!dataKey"
             v-for="(item, index) in items"
             :key="index"
             :value="item[dataKey]"
@@ -18,7 +18,7 @@
             {{ item[dataKey] }}
             </option>
             <option
-            v-if="dataKey === ''"
+            v-if="!(!!dataKey)"
             v-for="(item, index) in items"
             :key="index"
             :value="item"
@@ -34,30 +34,14 @@ import { placeholder } from '@babel/types';
 
 export default {
   props: {
-    idName: {type: String},
+    id: {type: String},
     label: {type: String},
     placeholder: {type: String},
     items: {type: Array},
     field: {type: String},
-    dataKey: {
-      type: String,
-      default: '',
-    },
-    isRequired: {
-      type: Boolean,
-      default: true,
-    }
+    dataKey: {type: String},
+    isRequired: {type: Boolean, default: true}
   },
-  data() {
-    return {
-      model: ''
-    }
-  },
-  watch: {
-    model: function(value) {
-        this.$store.state.form[this.field] = value;
-    }
-  }
 };
 </script>
 
