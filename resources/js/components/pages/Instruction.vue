@@ -196,7 +196,7 @@
                           <td colspan="2">
                             <div id="button" class="float-end">
                               <div id="button_container_1">
-                                <button type="button" class="btn btn-info">
+                                <button type="button" class="btn btn-info" @click="addCost()">
                                   <i class="fa fa-plus" aria-hidden="true"></i>
                                 </button>
                               </div>
@@ -302,6 +302,11 @@ export default {
   },
   methods: {
     ...mapActions(["fetchVendors", "fetchInvoiceTargets", "fetchCustomers", "fetchTransactionsForSI", "fetchTransactionsForLI"]),
+
+    addCost(){
+      this.form.costs.push({});
+    },
+
     submitForm(){
       axios.post('/api/instructions', this.form, {
         headers: {
