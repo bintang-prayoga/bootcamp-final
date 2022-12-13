@@ -15,7 +15,11 @@ export default new Vuex.Store({
             invoice_to: '',
             customer: '',
             customer_po_no: '',
-            costs: [{}],
+            costs: [{
+                vat_ammount: 0,
+                sub_total: 0,
+                total: 0
+            }],
             attachments: [],
             note: '',
             link_to: '',
