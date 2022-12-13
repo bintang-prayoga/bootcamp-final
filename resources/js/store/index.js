@@ -112,21 +112,35 @@ export default new Vuex.Store({
             commit('SET_FORM', defaultForm);
         },
         async postFormInstruction({commit}, payload) {
-            axios.post('/api/instructions', payload, {
+            const formData = new FormData();
+            for(const [key, value] of Object.entries(payload)){
+                if(Array.isArray(value)) {
+                    value.forEach((element, index) => {
+                        if(key == 'attachments'){
+                            formData.append(`${key}[${index}]`, element);
+                        } else {
+                            for(const [subKey, subValue] of Object.entries(element)){
+                                formData.append(`${key}[${index}][${subKey}]`, subValue);
+                            }
+                        }
+                    })
+                } else {
+                    formData.append(key, value);
+                }
+            }
+
+            axios.post('/api/instructions', formData, {
                 headers: {
-                  'Accept': 'application/json'
+                  'Accept': 'application/json',
                 }
             })
             .then((response) => {
                 console.log(response);
-
-                commit('SET_FORM', {});
-                router.push('/details/' + response.data.data.id);
             })
             .catch((error) => {
                 console.log(error);
             });
-        }
+        },
     },
     mutations: {
         SET_VENDORS(state, vendors) {
