@@ -1,29 +1,12 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import {router} from "../app.js";
 
 Vue.use(Vuex);
-
 export default new Vuex.Store({
     state: {
-        form: {
-            type: '',
-            assigned_vendor: '',
-            attention_of: '',
-            quotation_no: '',
-            vendor_address: '',
-            invoice_to: '',
-            customer: '',
-            customer_po_no: '',
-            costs: [{
-                vat_ammount: 0,
-                sub_total: 0,
-                total: 0
-            }],
-            attachments: [],
-            note: '',
-            link_to: '',
-        },
+        form: {},
         vendors: null,
         invoiceTargets: null,
         customers: null,
@@ -92,6 +75,58 @@ export default new Vuex.Store({
                 console.log(error);
             }
         },
+        async setFormInstruction({commit}, payload) {
+            let defaultForm = {
+                type: payload.type,
+                assigned_vendor: '',
+                attention_of: '',
+                quotation_no: '',
+                vendor_address: '',
+                invoice_to: '',
+                customer: '',
+                customer_po_no: '',
+                costs: [{
+                    vat_ammount: 0,
+                    sub_total: 0,
+                    total: 0
+                }],
+                attachments: [],
+                note: '',
+                link_to: '',
+            };
+
+            if(Object.keys(payload).length > 1) {
+                defaultForm.assigned_vendor = payload.assigned_vendor;
+                defaultForm.attention_of = payload.attention_of;
+                defaultForm.quotation_no = payload.quotation_no;
+                defaultForm.vendor_address = payload.vendor_address;
+                defaultForm.invoice_to = payload.invoice_to;
+                defaultForm.customer = payload.customer;
+                defaultForm.customer_po_no = payload.customer_po_no;
+                defaultForm.costs = payload.costs;
+                if(!!payload.attachments) defaultForm.attachments = payload.attachments;
+                if(!!payload.note) defaultForm.note = payload.note;
+                if(!!payload.link_to) defaultForm.link_to = payload.link_to;
+            }
+
+            commit('SET_FORM', defaultForm);
+        },
+        async postFormInstruction({commit}, payload) {
+            axios.post('/api/instructions', payload, {
+                headers: {
+                  'Accept': 'application/json'
+                }
+            })
+            .then((response) => {
+                console.log(response);
+
+                commit('SET_FORM', {});
+                router.push('/details/' + response.data.data.id);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
     },
     mutations: {
         SET_VENDORS(state, vendors) {
@@ -109,6 +144,9 @@ export default new Vuex.Store({
         SET_DETAILS(state, details) {
             state.details = details;
         },
+        SET_FORM(state, form) {
+            state.form = form;
+        }
     },
     modules: {},
 });

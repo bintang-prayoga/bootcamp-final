@@ -9,7 +9,7 @@
       </p>
       <div class="container mt-5 p-0">
         <div class="">
-          <form v-on:submit.prevent="submitForm" method="post">
+          <form v-on:submit.prevent="$store.dispatch('postFormInstruction', form)" method="post">
             <div class="row justify-content-between">
               <div class="col-md-3 justify-content-start">
                 <select
@@ -88,7 +88,7 @@
                         <label class="btn btn-info">
                           <i class="fa fa-plus" aria-hidden="true"></i>
                           Add Attachment
-                          <input type="file" hidden />
+                          <input type="file" hidden  multiple/>
                         </label>
                       </div>
                       <div class="col-md-6">
@@ -165,40 +165,39 @@ export default {
     },
 
     total: function() {
-      return {
-        sub: this.form.costs.reduce((current, previous) => {return current + parseFloat(previous.sub_total ?? 0)}, 0).toFixed(2),
-        vat: this.form.costs.reduce((current, previous) => {return current + parseFloat(previous.vat_ammount ?? 0)}, 0).toFixed(2),
-        total: this.form.costs.reduce((current, previous) => {return current + parseFloat(previous.total ?? 0)}, 0).toFixed(2)
+      if(!!this.form.costs){
+        return {
+          sub: this.form.costs.reduce((current, previous) => {return current + parseFloat(previous.sub_total ?? 0)}, 0).toFixed(2),
+          vat: this.form.costs.reduce((current, previous) => {return current + parseFloat(previous.vat_ammount ?? 0)}, 0).toFixed(2),
+          total: this.form.costs.reduce((current, previous) => {return current + parseFloat(previous.total ?? 0)}, 0).toFixed(2)
+        }
+      } else {
+        return {
+          sub: (0).toFixed(2),
+          vat: (0).toFixed(2),
+          total: (0).toFixed(2)
+        }
       }
     }
   },
   methods: {
-    ...mapActions(["fetchVendors", "fetchInvoiceTargets", "fetchCustomers", "fetchTransactionsForSI", "fetchTransactionsForLI"]),
-
-    submitForm(){
-      axios.post('/api/instructions', this.form, {
-        headers: {
-          'Accept': 'application/json'
-        }
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    }
+    ...mapActions([
+      "fetchVendors",
+      "fetchInvoiceTargets",
+      "fetchCustomers",
+      "fetchTransactionsForSI",
+      "fetchTransactionsForLI",
+      "setFormInstruction",
+      "postFormInstruction"
+    ]),
   },
   beforeMount() {
     this.$store.dispatch("fetchVendors");
     this.$store.dispatch("fetchInvoiceTargets");
     this.$store.dispatch("fetchCustomers");
 
-    if(this.$route.params.type === 'SI') {
-      this.form.type = 'SI';
-    } else {
-      this.form.type = 'LI';
-    }
+    const type = this.$route.params.type === 'SI' ? 'SI' : 'LI';
+    this.$store.dispatch("setFormInstruction", {type: type});
   },
   updated() {
     if(this.form.vendor_address == '' && document.getElementById('vendor-address').selectedIndex != 0){
