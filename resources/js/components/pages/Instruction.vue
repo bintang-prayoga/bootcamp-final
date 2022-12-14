@@ -102,7 +102,7 @@
                         <textarea
                           class="form-control"
                           id="notes"
-                          rows="3"
+                          rows="5"
                           style="resize: none"
                           v-model="form.note"
                         ></textarea>
