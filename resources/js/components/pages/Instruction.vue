@@ -8,7 +8,7 @@
         <span class="text-success">> 3rd Party Instruction</span>
       </p>
       <div class="container mt-5 p-0">
-        <div class="">
+        <div>
           <form v-on:submit.prevent="$store.dispatch('postFormInstruction', form)" method="post">
             <div class="row justify-content-between">
               <div class="col-md-3 justify-content-start">
@@ -85,26 +85,7 @@
                     <div class="row mt-5">
                       <div class="col-md-6">
                         <label class="form-label fs-3">Attachment</label><br />
-                        <div class="mb-3 pb-3">
-                          <div class="d-flex w-75 border-bottom border-secondary mb-3" v-if="form.attachments.length != 0" v-for="(value, index) in form.attachments">
-                            <font-awesome-icon
-                              icon="fa-solid fa-paperclip"
-                              class="text-info fs-4 mb-2 pe-2 align-self-end"
-                            />
-                            <div class="ms-3 me-auto mt-0">
-                              <p class="fs-4 my-0 text-info fw-bold">{{ value.name }}</p>
-                              <p class="my-0 text-muted">{{ formatDate(value.lastModified) }}</p>
-                            </div>
-                            <div class="align-self-end">
-                              <button type="button" class="btn btn-link p-0" @click="removeFile(index)">
-                                  <font-awesome-icon
-                                    icon="fa-solid fa-trash"
-                                    class="fs-4 text-danger"
-                                  />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
+                          <Attachments :attachments="form.attachments" @handleRemove="removeFile" />
                         <label class="btn btn-info">
                           <i class="fa fa-plus" aria-hidden="true"></i>
                           Add Attachment
@@ -221,42 +202,11 @@ export default {
       Array.from(event.target.files).forEach(file => {
         this.form.attachments.push(file);
       })
-
-    //   console.log(this.form.attachments);
     },
 
     removeFile(index) {
       this.form.attachments.splice(index, 1);
     },
-
-    formatDate(dateVal) {
-      var newDate = new Date(dateVal);
-
-      var sMonth = this.padValue(newDate.getMonth() + 1);
-      var sDay = this.padValue(newDate.getDate());
-      var sYear = newDate.getFullYear();
-      var sHour = newDate.getHours();
-      var sMinute = this.padValue(newDate.getMinutes());
-      var sAMPM = "AM";
-
-      var iHourCheck = parseInt(sHour);
-
-      if (iHourCheck > 12) {
-          sAMPM = "PM";
-          sHour = iHourCheck - 12;
-      }
-      else if (iHourCheck === 0) {
-          sHour = "12";
-      }
-
-      sHour = this.padValue(sHour);
-
-      return sDay + "/" + sMonth + "/" + sYear + " " + sHour + ":" + sMinute + " " + sAMPM;
-    },
-
-    padValue(value) {
-      return (value < 10) ? "0" + value : value;
-    }
   },
   beforeMount() {
     this.$store.dispatch("fetchVendors");

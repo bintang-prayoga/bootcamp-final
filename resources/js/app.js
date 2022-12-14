@@ -39,6 +39,10 @@ Vue.component(
     "TableComp",
     require("./components/partials/TableComp.vue").default
 );
+Vue.component(
+    "Attachments",
+    require("./components/partials/Attachments.vue").default
+);
 
 Vue.use(VueRouter);
 export const router = new VueRouter({
