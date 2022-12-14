@@ -120,6 +120,11 @@
                     <div class="col-3">
                       <Select :is-required="false" id="transactions" :items="transactions" :field="'link_to'" data-key="no" label="Link To" placeholder="Select Item"></Select>
                     </div>
+                    <div v-if="!!form.link_to" class="col-5 opacity-75 align-self-end" @click="removeLink">
+                      <button type="button" class="btn btn-danger text-white">
+                        Remove Link
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -207,6 +212,10 @@ export default {
     removeFile(index) {
       this.form.attachments.splice(index, 1);
     },
+
+    removeLink() {
+      this.form.link_to = '';
+    }
   },
   beforeMount() {
     this.$store.dispatch("fetchVendors");
