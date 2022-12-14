@@ -10,12 +10,17 @@ export default new Vuex.Store({
         invoiceTargets: null,
         customers: null,
         details: null,
+        accessToken: null,
+        refreshToken: null,
     },
     getters: {
         getVendors: (state) => state.vendors,
         getInvoiceTargets: (state) => state.invoiceTargets,
         getCustomers: (state) => state.customers,
         getDetails: (state) => state.details,
+        loggedIn(state) {
+            return state.accessToken != null;
+        },
     },
     actions: {
         async fetchVendors({ commit }) {
@@ -54,6 +59,32 @@ export default new Vuex.Store({
                 console.log(error);
             }
         },
+        userLogin(context, usercredentials) {
+            return new Promise((resolve, reject) => {
+                axios
+                    .post("/api/auth/login", {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        email: usercredentials.email,
+                        password: usercredentials.password,
+                    })
+                    .then((response) => {
+                        console.log(response.data.data.authorization.token);
+                        axios.defaults.headers.common["Authorization"] =
+                            "Bearer " + response.data.data.authorization.token;
+                        localStorage.setItem(
+                            "token",
+                            response.data.data.authorization.token
+                        );
+                        localStorage.setItem(
+                            "user",
+                            response.data.data.user.name
+                        );
+                        resolve();
+                    });
+            });
+        },
     },
     mutations: {
         SET_VENDORS(state, vendors) {
@@ -67,6 +98,10 @@ export default new Vuex.Store({
         },
         SET_DETAILS(state, details) {
             state.details = details;
+        },
+        updateStorage(state, { access, refresh }) {
+            state.accessToken = access;
+            state.refreshToken = refresh;
         },
     },
     modules: {},

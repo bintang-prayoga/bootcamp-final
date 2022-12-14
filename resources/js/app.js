@@ -17,6 +17,11 @@ require("./bootstrap");
 window.Vue = require("vue").default;
 library.add(faBell, faTruck, faInfoCircle, faPlus, faPaperclip);
 
+let token = localStorage.getItem("token");
+if (token) {
+    window.axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+}
+
 Vue.component("app-comp", require("./components/AppComp.vue").default);
 Vue.component("Navbar", require("./components/Layout/Navbar.vue").default);
 Vue.component("Tabs", require("./components/Layout/Tabs.vue").default);
@@ -48,6 +53,25 @@ const router = new VueRouter({
     mode: "history",
     routes,
 });
+
+// router.beforeEach((to, from, next) => {
+//     // you could define your own authentication logic with token
+//     let isAuthenticated = store.getters.isAuthenticated;
+
+//     // check route meta if it requires auth or not
+//     if (to.matched.some((record) => record.meta.requiresAuth)) {
+//         if (!isAuthenticated) {
+//             next({
+//                 path: "/login",
+//                 params: { nextUrl: to.fullPath },
+//             });
+//         } else {
+//             next();
+//         }
+//     } else {
+//         next();
+//     }
+// });
 
 const app = new Vue({
     el: "#app",

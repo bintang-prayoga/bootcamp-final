@@ -3,6 +3,7 @@ import Open from "./components/pages/Open.vue";
 import Instruction from "./components/pages/Instruction.vue";
 import Completed from "./components/pages/Completed.vue";
 import Login from "./components/pages/Login.vue";
+import LoginPass from "./components/pages/LoginPass.vue";
 import Details from "./components/pages/Details.vue";
 
 export const routes = [
@@ -25,6 +26,11 @@ export const routes = [
         path: "/login",
         name: "Login",
         component: Login,
+    },
+    {
+        path: "/login-pass",
+        name: "LoginPass",
+        component: LoginPass,
     },
     {
         path: "/details/:id",

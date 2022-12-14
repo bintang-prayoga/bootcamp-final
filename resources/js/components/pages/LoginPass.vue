@@ -16,22 +16,23 @@
                             />
                         </div>
                         <form
-                            @submit.prevent="emailPage"
+                            @submit.prevent="login"
                             method="post"
                             class="mt-3"
                             style="margin-bottom: 230px"
                         >
                             <div class="mb-5">
-                                <label for="email" class="form-label text-light"
-                                    >Email</label
+                                <label
+                                    for="passcode"
+                                    class="form-label text-light"
+                                    >Passcode</label
                                 >
                                 <input
-                                    type="email"
+                                    type="password"
                                     class="form-control"
-                                    id="email"
-                                    name="email"
-                                    v-model="email"
-                                    placeholder="name@example.com"
+                                    id="passcode"
+                                    v-model="passcode"
+                                    name="passcode"
                                 />
                             </div>
 
@@ -39,11 +40,11 @@
                                 type="submit"
                                 class="btn btn-info btn-lg mt-5 col-lg-12"
                             >
-                                Submit
+                                Login
                             </button>
                         </form>
+                        <div class="segitiga3"></div>
                     </div>
-                    <div class="segitiga3"></div>
                 </div>
             </div>
         </div>
@@ -54,20 +55,33 @@
 export default {
     data() {
         return {
-            email: "",
+            passcode: "",
         };
     },
     methods: {
-        emailPage() {
-            // make props email
-            // this.$emit("email", this.email);
-            this.$router.push({
-                name: "LoginPass",
-                params: { email: this.email },
-            });
+        login() {
+            this.$store
+                .dispatch("userLogin", {
+                    email: this.$route.params.email,
+                    password: this.passcode,
+                })
+                .then(() => {
+                    this.$router.push({ name: "Open" });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         },
     },
     mounted() {
+        // check email param
+        if (
+            this.$route.params.email == undefined ||
+            this.$route.params.email == null
+        ) {
+            this.$router.push({ name: "Login" });
+        }
+
         // check local storage token
         if (localStorage.getItem("token")) {
             this.$router.push({ name: "Open" });
@@ -89,8 +103,8 @@ export default {
 }
 .segitiga3 {
     height: 0px;
-    width: 460px;
-    border-top: solid 120px #474b54;
+    width: 100%;
+    border-top: solid 100% #474b54;
     border-left: solid 238px transparent;
     border-right: solid 238px transparent;
     margin-bottom: 20px;
