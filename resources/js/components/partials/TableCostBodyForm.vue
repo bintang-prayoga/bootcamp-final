@@ -1,6 +1,6 @@
 <template>
     <tbody>
-        <tr v-for="(value, index) in $store.state.form.costs">
+        <tr class="anti-hover" v-for="(value, index) in $store.state.form.costs">
             <th>
                 <input
                     type="text"

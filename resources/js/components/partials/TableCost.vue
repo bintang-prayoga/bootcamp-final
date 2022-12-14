@@ -19,7 +19,7 @@
         <TableForm v-if="asForm"></TableForm>
         <Table v-else></Table>
         <tfoot>
-            <tr>
+            <tr class="anti-hover">
                 <td colspan="6"></td>
                 <td class="align-middle">USD (Total)</td>
                 <td class="text-end align-middle" id="total-of-vat">{{ total.vat }}</td>
@@ -66,5 +66,12 @@
         }
     };
 </script>
+<style>
+.anti-hover:hover {
+    color: inherit !important;
+    cursor: auto;
+}
+
+</style>
 
 
