@@ -225,15 +225,6 @@ export default {
     const type = this.$route.params.type === 'SI' ? 'SI' : 'LI';
     this.$store.dispatch("setFormInstruction", {type: type});
   },
-  updated() {
-    if(this.form.vendor_address == '' && document.getElementById('vendor-address').selectedIndex != 0){
-      document.getElementById('vendor-address').selectedIndex = 0;
-    }
-
-    if(this.form.link_to == '' && document.getElementById('transactions').selectedIndex != 0){
-      document.getElementById('transactions').selectedIndex = 0;
-    }
-  },
   watch: {
     formCopy: {
       deep:true,

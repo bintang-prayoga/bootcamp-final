@@ -8,7 +8,7 @@
             :required="!!isRequired"
             v-model="$store.state.form[field]"
         >
-            <option disabled hidden value="">{{ placeholder }}</option>
+            <option disabled hidden :value="''">{{ placeholder }}</option>
             <option
             v-if="!!dataKey"
             v-for="(item, index) in items"
