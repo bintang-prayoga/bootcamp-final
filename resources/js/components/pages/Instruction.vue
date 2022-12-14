@@ -10,103 +10,131 @@
       <div class="container mt-5 p-0">
         <div>
           <form v-on:submit.prevent="$store.dispatch('postFormInstruction', form)" method="post">
-            <div class="row justify-content-between">
-              <div class="col-md-3 justify-content-start">
-                <select
-                  class="form-select fs-4"
-                  name="type"
-                  v-model="form.type"
-                >
-                  <option value="LI" selected>
-                    <i class="fa-solid fa-truck"></i>
-                    Logistic Instruction
-                  </option>
-                  <option value="SI">
-                    <i class="fa fa-user" aria-hidden="true"></i>
-                    Service Instruction
-                  </option>
-                </select>
-              </div>
-              <div class="col-md-6 text-end">
-                <button class="btn-draft" disabled>Draft</button>
-              </div>
-            </div>
-
-            <div class="form-group row mt-5">
-              <div class="col-2">
-                <Select id="vendors" :items="vendors" :field="'assigned_vendor'" data-key="name"  label="Assigned Vendor" placeholder="Enter Vendor"></Select>
-              </div>
-              <Input
-                id="attention-of"
-                column="col-2"
-                label="Attention Of"
-                placeholder="Enter Attention Of"
-                field="attention_of"
-              />
-              <Input
-                id="quotation-no"
-                column="col-2"
-                label="Quotation No."
-                placeholder="Enter Quotation"
-                field="quotation_no"
-              />
-              <div class="col-2">
-                <Select id="invoice-to" :items="invoiceTargets" :field="'invoice_to'" data-key="name" label="Invoice To" placeholder="Select an Option"></Select>
-              </div>
-              <div class="col-2">
-                <Select id="customer" :items="customers" :field="'customer'" data-key="name" label="Customer Contract" placeholder="Select Customer"></Select>
-              </div>
-            </div>
-
-            <div class="form-group row mt-5">
-              <div class="col-10">
-                <Select id="vendor-address" :items="vendorAddresses" :field="'vendor_address'" label="Vendor Address" placeholder="Enter Vendor Address"></Select>
-              </div>
-              <Input
-                id="customer-po-no"
-                column="col-2"
-                label="Customer PO No."
-                placeholder="Enter Customer PO"
-                field="customer_po_no"
-              />
-            </div>
-
             <div class="form-group mt-5">
               <!-- Card Table -->
               <div class="card">
-                <h4 class="card-title p-4">
-                  <span class="fw-bold">Cost Detail</span>
-                </h4>
                 <div class="card-body">
-                  <div id="table">
-                    <TableCost :total="total" :as-form="true" />
-                  </div>
-                  <div class="mt-5">
-                    <div class="row mt-5">
-                      <div class="col-md-6">
-                        <label class="form-label fs-3">Attachment</label><br />
-                          <Attachments :attachments="form.attachments" @handleRemove="removeFile" />
-                        <label class="btn btn-info">
-                          <i class="fa fa-plus" aria-hidden="true"></i>
-                          Add Attachment
-                          <input
-                            type="file"
-                            hidden
-                            @change="handleFile"
-                            multiple
+                  <div class="row my-3 justify-content-between">
+                    <div class="col-2">
+                      <select
+                        class="form-select fs-4 w-100"
+                        name="type"
+                        v-model="form.type"
+                      >
+                        <option value="LI" selected>
+                          <font-awesome-icon
+                            icon="fa-solid fa-truck"
+                            class="text-info fs-3"
                           />
-                        </label>
+                          Logistic Instruction
+                        </option>
+                        <option value="SI">
+                          <font-awesome-icon
+                            icon="fa-solid fa-user"
+                            class="text-info fs-3"
+                          />
+                          Service Instruction
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col-1">
+                      <span class="badge rounded-pill text-dark bg-black bg-opacity-10 w-100 border border-secondary border-opacity-25">Draft</span>
+                    </div>
+                  </div>
+                  <div class="row m-2 pb-5 justify-content-end gx-5 border-bottom border-secondary border-opacity-50">
+                    <div class="col-8 pb-3 border-end border-secondary border-opacity-50">
+                      <div class="row mb-5">
+                          <Select
+                            column="col-3"
+                            id="vendors"
+                            :items="vendors"
+                            :field="'assigned_vendor'"
+                            data-key="name"
+                            label="Assigned Vendor"
+                            placeholder="Enter Vendor">
+                          </Select>
+                          <Input
+                            id="attention-of"
+                            column="col-3"
+                            label="Attention Of"
+                            placeholder="Enter Attention Of"
+                            field="attention_of"
+                          />
+                          <Input
+                            id="quotation-no"
+                            column="col-3"
+                            label="Quotation No."
+                            placeholder="Enter Quotation"
+                            field="quotation_no"
+                          />
+                        <Select
+                          column="col-3"
+                          id="invoice-to"
+                          :items="invoiceTargets"
+                          :field="'invoice_to'"
+                          data-key="name"
+                          label="Invoice To"
+                          placeholder="Select an Option">
+                        </Select>
                       </div>
-                      <div class="col-md-6">
-                        <label for="notes" class="form-label fs-3">Notes</label>
-                        <textarea
-                          class="form-control"
-                          id="notes"
-                          rows="5"
-                          style="resize: none"
-                          v-model="form.note"
-                        ></textarea>
+                      <div class="row">
+                        <Select column="col-12" id="vendor-address" :items="vendorAddresses" :field="'vendor_address'" label="Vendor Address" placeholder="Enter Vendor Address"></Select>
                       </div>
+                    </div>
+                    <div class="col-2">
+                      <div class="row mb-5">
+                        <Select
+                          column="col-11"
+                          id="customer"
+                          :items="customers"
+                          :field="'customer'"
+                          data-key="name"
+                          label="Customer Contract"
+                          placeholder="Select Customer">
+                        </Select>
+                      </div>
+                      <div class="row">
+                        <Input
+                          id="customer-po-no"
+                          column="col-11"
+                          label="Customer PO No."
+                          placeholder="Enter Customer PO"
+                          field="customer_po_no"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row my-3 pt-2">
+                    <label class="form-label text-dark fs-3 fw-bolder">Card Title</label>
+                    <div id="table">
+                      <TableCost :total="total" :as-form="true" />
+                    </div>
+                  </div>
+                  <div class="row my-3">
+                    <div class="col-md-6">
+                      <label class="form-label fs-3">Attachment</label><br />
+                        <Attachments :attachments="form.attachments" @handleRemove="removeFile" />
+                      <label class="btn btn-info">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Add Attachment
+                        <input
+                          type="file"
+                          hidden
+                          @change="handleFile"
+                          multiple
+                        />
+                      </label>
+                    </div>
+                    <div class="col-md-6">
+                      <label for="notes" class="form-label fs-3">Notes</label>
+                      <textarea
+                        class="form-control"
+                        id="notes"
+                        rows="5"
+                        style="resize: none"
+                        v-model="form.note"
+                      ></textarea>
                     </div>
                   </div>
                 </div>
@@ -117,9 +145,16 @@
               <div class="card mt-5 p-4">
                 <div class="card-body">
                   <div class="row">
-                    <div class="col-3">
-                      <Select :is-required="false" id="transactions" :items="transactions" :field="'link_to'" data-key="no" label="Link To" placeholder="Select Item"></Select>
-                    </div>
+                    <Select
+                      column="col-3"
+                      :is-required="false"
+                      id="transactions"
+                      :items="transactions"
+                      :field="'link_to'"
+                      data-key="no"
+                      label="Link To"
+                      placeholder="Select Item">
+                    </Select>
                     <div v-if="!!form.link_to" class="col-5 opacity-75 align-self-end" @click="removeLink">
                       <button type="button" class="btn btn-danger text-white">
                         Remove Link

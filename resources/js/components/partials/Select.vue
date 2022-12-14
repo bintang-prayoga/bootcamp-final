@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :class="column">
         <label :for="id" class="form-control-label">{{ label }}</label>
         <select
             class="form-control"
@@ -34,6 +34,7 @@ import { placeholder } from '@babel/types';
 
 export default {
   props: {
+    column: {type: String},
     id: {type: String},
     label: {type: String},
     placeholder: {type: String},
