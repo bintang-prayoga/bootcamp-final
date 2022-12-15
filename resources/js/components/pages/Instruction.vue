@@ -15,27 +15,27 @@
               <div class="card">
                 <div class="card-body">
                   <div class="row my-3 justify-content-between">
-                    <div class="col-2">
-                      <select
-                        class="form-select fs-4 w-100"
-                        name="type"
-                        v-model="form.type"
-                      >
-                        <option value="LI" selected>
-                          <font-awesome-icon
-                            icon="fa-solid fa-truck"
-                            class="text-info fs-3"
-                          />
-                          Logistic Instruction
-                        </option>
-                        <option value="SI">
+                    <div class="col-3">
+                      <button type="button" class="btn btn-default dropdown-toggle shadow-none w-auto select-picker text-capitalize fs-4" id="type" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span v-if="form.type == 'LI'">
+                            <font-awesome-icon
+                              icon="fa-solid fa-truck"
+                              class="text-info fs-3 me-3"
+                            />
+                            Logistic Instruction
+                        </span>
+                        <span v-else>
                           <font-awesome-icon
                             icon="fa-solid fa-user"
-                            class="text-info fs-3"
+                            class="text-info fs-3 me-3"
                           />
                           Service Instruction
-                        </option>
-                      </select>
+                        </span>
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="type">
+                        <li><a class="dropdown-item" data="LI" @click="handleType">Logistic Instruction</a></li>
+                        <li><a class="dropdown-item" data="SI" @click="handleType">Service Instruction</a></li>
+                      </ul>
                     </div>
                     <div class="col"></div>
                     <div class="col-1">
@@ -250,6 +250,10 @@ export default {
 
     removeLink() {
       this.form.link_to = '';
+    },
+
+    handleType(event) {
+      this.form.type = event.target.attributes.data.value;
     }
   },
   beforeMount() {
@@ -295,6 +299,16 @@ export default {
   border-radius: 20px;
 }
 option {
+  cursor: pointer;
+}
+.select-picker {
+  overflow: hidden;
+  width: 100%;
+}
+.dropdown-toggle::after {
+  vertical-align: middle !important;
+}
+.dropdown-item {
   cursor: pointer;
 }
 </style>
