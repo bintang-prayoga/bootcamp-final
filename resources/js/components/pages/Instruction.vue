@@ -33,8 +33,8 @@
                         </span>
                       </button>
                       <ul class="dropdown-menu" aria-labelledby="type">
-                        <li><a class="dropdown-item" data="LI" @click="handleType">Logistic Instruction</a></li>
-                        <li><a class="dropdown-item" data="SI" @click="handleType">Service Instruction</a></li>
+                        <li><a class="dropdown-item" data="LI" @click="(event) => {handleSelect(event)}">Logistic Instruction</a></li>
+                        <li><a class="dropdown-item" data="SI" @click="(event) => {handleSelect(event)}">Service Instruction</a></li>
                       </ul>
                     </div>
                     <div class="col"></div>
@@ -46,6 +46,7 @@
                     <div class="col-8 pb-3 border-end border-secondary border-opacity-50">
                       <div class="row mb-5">
                           <Select
+                            @handleSelect="handleSelect"
                             column="col-3"
                             id="vendors"
                             :items="vendors"
@@ -69,6 +70,7 @@
                             field="quotation_no"
                           />
                         <Select
+                          @handleSelect="handleSelect"
                           column="col-3"
                           id="invoice-to"
                           :items="invoiceTargets"
@@ -79,12 +81,14 @@
                         </Select>
                       </div>
                       <div class="row">
-                        <Select column="col-12" id="vendor-address" :items="vendorAddresses" :field="'vendor_address'" label="Vendor Address" placeholder="Enter Vendor Address"></Select>
+                        <Select
+                          @handleSelect="handleSelect" column="col-12" id="vendor-address" :items="vendorAddresses" :field="'vendor_address'" label="Vendor Address" placeholder="Enter Vendor Address"></Select>
                       </div>
                     </div>
                     <div class="col-2">
                       <div class="row mb-5">
                         <Select
+                          @handleSelect="handleSelect"
                           column="col-11"
                           id="customer"
                           :items="customers"
@@ -146,6 +150,7 @@
                 <div class="card-body">
                   <div class="row">
                     <Select
+                      @handleSelect="handleSelect"
                       column="col-3"
                       :is-required="false"
                       id="transactions"
@@ -252,8 +257,9 @@ export default {
       this.form.link_to = '';
     },
 
-    handleType(event) {
-      this.form.type = event.target.attributes.data.value;
+    handleSelect(event, field = 'type') {
+        console.log(event);
+      this.form[field] = event.target.attributes.data.value;
     }
   },
   beforeMount() {
@@ -279,10 +285,13 @@ export default {
         }
 
         if(newValue.assigned_vendor != oldValue.assigned_vendor){
-            let vendorIndex = document.getElementById('vendors').selectedIndex;
+          let vendorIndex = 0
+          if(!!newValue.assigned_vendor) {
+            vendorIndex = document.querySelector("a[data='" + this.form.assigned_vendor + "']").attributes[1].value ?? 0;
+          }
             if(vendorIndex !== 0) {
                 this.form.vendor_address = '';
-                this.vendorAddresses = this.vendors[vendorIndex - 1].addresses;
+                this.vendorAddresses = this.vendors[vendorIndex].addresses;
             }
         }
       }
