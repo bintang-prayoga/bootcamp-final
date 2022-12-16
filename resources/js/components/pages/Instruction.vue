@@ -47,6 +47,7 @@
                       <div class="row mb-5">
                           <Select
                             @handleSelect="handleSelect"
+                            @handleSearch="searchVendors"
                             column="col-3"
                             id="vendors"
                             :items="vendors"
@@ -71,6 +72,7 @@
                           />
                         <Select
                           @handleSelect="handleSelect"
+                          @handleSearch="searchInvoices"
                           column="col-3"
                           id="invoice-to"
                           :items="invoiceTargets"
@@ -89,6 +91,7 @@
                       <div class="row mb-5">
                         <Select
                           @handleSelect="handleSelect"
+                          @handleSearch="searchCustomers"
                           column="col-11"
                           id="customer"
                           :items="customers"
@@ -194,6 +197,7 @@
 import Select from "../partials/Select.vue";
 import TableCost from '../partials/TableCost';
 import { mapGetters, mapActions } from "vuex";
+// import _ from 'lodash';
 
 export default {
   data() {
@@ -236,8 +240,7 @@ export default {
       "fetchVendors",
       "fetchInvoiceTargets",
       "fetchCustomers",
-      "fetchTransactionsForSI",
-      "fetchTransactionsForLI",
+      "fetchTransactions",
       "setFormInstruction",
       "postFormInstruction",
       "saveFile",
@@ -260,6 +263,18 @@ export default {
     handleSelect(event, field = 'type') {
         console.log(event);
       this.form[field] = event.target.attributes.data.value;
+    },
+
+    searchVendors(event) {
+        this.$store.dispatch("fetchVendors", {search: event.target.value});
+    },
+
+    searchInvoices(event) {
+        this.$store.dispatch("fetchInvoiceTargets", {search: event.target.value});
+    },
+
+    searchCustomers(event) {
+        this.$store.dispatch("fetchCustomers", {search: event.target.value});
     }
   },
   beforeMount() {
@@ -277,10 +292,10 @@ export default {
         if(newValue.type != oldValue.type) {
           if(newValue.type === "SI") {
             this.form.link_to = ""
-            this.$store.dispatch("fetchTransactionsForSI");
+            this.$store.dispatch("fetchTransactions", {type: 'SI'});
           } else if(newValue.type === "LI") {
             this.form.link_to = ""
-            this.$store.dispatch("fetchTransactionsForLI");
+            this.$store.dispatch("fetchTransactions", {type: 'LI'});
           }
         }
 

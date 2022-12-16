@@ -11,24 +11,35 @@
         </button>
         <input type="text" class="input-hidden" :name="field" :value="$store.state.form[field]" :required="isRequired">
         <ul class="dropdown-menu" :id="id">
-          <li v-for="(item, index) in items">
-            <a v-if="!!dataKey"
-              class="dropdown-item"
-              :data="item[dataKey]"
-              :data-index="index"
-              @click="(event) => $emit('handleSelect', event, field)"
-            >
-              {{ item[dataKey] }}
-            </a>
-            <a v-else
-              class="dropdown-item"
-              :data="item"
-              :data-index="index"
-              @click="(event) => $emit('handleSelect', event, field)"
-            >
-              {{ item }}
-            </a>
-          </li>
+            <div class="input-group d-flex mb-2">
+                <span class="input-group-text border-end-0 bg-white" style="height: 34px" :id="'search-'+id">
+                    <font-awesome-icon
+                        icon="fa-solid fa-search"
+                        class="text-info fs-4"
+                    />
+                </span>
+                <input class="form-control border-start-0 fs-4" style="height: 34px" type="text" placeholder="Search" aria-label="Search" @input="handleSearch" :aria-describedby="'search-'+id">
+            </div>
+            <ul class="list-group dropdown-items overflow-auto p-0 m-0">
+                <li v-for="(item, index) in items">
+                  <a v-if="!!dataKey"
+                    class="dropdown-item text-decoration-none"
+                    :data="item[dataKey]"
+                    :data-index="index"
+                    @click="(event) => $emit('handleSelect', event, field)"
+                  >
+                    {{ item[dataKey] }}
+                  </a>
+                  <a v-else
+                    class="dropdown-item text-decoration-none"
+                    :data="item"
+                    :data-index="index"
+                    @click="(event) => $emit('handleSelect', event, field)"
+                  >
+                    {{ item }}
+                  </a>
+                </li>
+            </ul>
         </ul>
     </div>
   </template>
@@ -45,8 +56,24 @@ export default {
     items: {type: Array},
     field: {type: String},
     dataKey: {type: String},
-    isRequired: {type: Boolean, default: true}
+    isRequired: {type: Boolean, default: true},
   },
+  data: function() {
+    return {
+        search: ''
+    }
+  },
+  methods: {
+    handleSearch(event) {
+        if(typeof window.TIME !== 'undefined') {
+            clearTimeout(window.TIME);
+        }
+
+        window.TIME = setTimeout(() => {
+            this.$emit('handleSearch', event);
+        }, 1000);
+    }
+  }
 };
 </script>
 
@@ -58,5 +85,9 @@ export default {
     padding:0;
     margin:0;
     float:left;
+  }
+  .dropdown-items{
+    list-style: none;
+    max-height: 150px;
   }
 </style>

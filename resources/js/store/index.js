@@ -22,48 +22,60 @@ export default new Vuex.Store({
         getDetails: (state) => state.details,
     },
     actions: {
-        async fetchVendors({ commit }) {
+        async fetchVendors({ commit }, payload) {
             try {
-                const data = await axios.get("/api/vendors");
+                let data;
+                if(payload ?? false){
+                    data = await axios.get("/api/vendors?search=" + payload.search);
+                } else {
+                    data = await axios.get("/api/vendors");
+                }
                 commit("SET_VENDORS", data.data.data);
             } catch (error) {
                 alert(error);
                 console.log(error);
             }
         },
-        async fetchInvoiceTargets({ commit }) {
+        async fetchInvoiceTargets({ commit }, payload) {
             try {
-                const data = await axios.get("/api/invoice-targets");
+                let data;
+                if(payload ?? false){
+                    data = await axios.get("/api/invoice-targets?search=" + payload.search);
+                } else {
+                    data = await axios.get("/api/invoice-targets");
+                }
                 commit("SET_INVOICETARGETS", data.data.data);
             } catch (error) {
                 alert(error);
                 console.log(error);
             }
         },
-        async fetchCustomers({ commit }) {
+        async fetchCustomers({ commit }, payload) {
             try {
-                const data = await axios.get("/api/customers");
+                let data;
+                if(payload ?? false){
+                    data = await axios.get("/api/customers?search=" + payload.search);
+                } else {
+                    data = await axios.get("/api/customers");
+                }
                 commit("SET_CUSTOMERS", data.data.data);
             } catch (error) {
                 alert(error);
                 console.log(error);
             }
         },
-        async fetchTransactionsForLI({ commit }) {
+        async fetchTransactions({ commit }, payload) {
             try {
-                const data = await axios.get('/api/transactions?instructionType=LI');
+                let data;
+                if(payload.type == 'SI') {
+                    data = await axios.get('/api/transactions?instructionType=SI')
+                } else {
+                    data = await axios.get('/api/transactions?instructionType=LI');
+                }
                 commit("SET_TRANSACTIONS", data.data.data);
             } catch (error) {
                 alert(error);
                 console.log(error);
-            }
-        },
-        async fetchTransactionsForSI({ commit }) {
-            try {
-                const data = await axios.get('/api/transactions?instructionType=SI');
-                commit("SET_TRANSACTIONS", data.data.data);
-            } catch (error) {
-
             }
         },
         async fetchDetails({ commit }, id) {
