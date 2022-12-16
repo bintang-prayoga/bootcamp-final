@@ -66,12 +66,16 @@ export default new Vuex.Store({
         },
         async fetchTransactions({ commit }, payload) {
             try {
-                let data;
-                if(payload.type == 'SI') {
-                    data = await axios.get('/api/transactions?instructionType=SI')
-                } else {
-                    data = await axios.get('/api/transactions?instructionType=LI');
-                }
+                let queryParams = {
+                    instructionType: payload.type
+                };
+
+                if(payload.search ?? false) queryParams['search'] = payload.search
+
+                const params = new URLSearchParams(queryParams);
+                const data = await axios.get('/api/transactions', {
+                    params: params
+                });
                 commit("SET_TRANSACTIONS", data.data.data);
             } catch (error) {
                 alert(error);

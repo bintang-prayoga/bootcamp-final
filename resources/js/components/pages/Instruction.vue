@@ -84,7 +84,9 @@
                       </div>
                       <div class="row">
                         <Select
-                          @handleSelect="handleSelect" column="col-12" id="vendor-address" :items="vendorAddresses" :field="'vendor_address'" label="Vendor Address" placeholder="Enter Vendor Address"></Select>
+                          @handleSelect="handleSelect" column="col-12" id="vendor-address"
+                          :items="vendorAddresses"
+                          :field="'vendor_address'" label="Vendor Address" placeholder="Enter Vendor Address"></Select>
                       </div>
                     </div>
                     <div class="col-2">
@@ -154,6 +156,7 @@
                   <div class="row">
                     <Select
                       @handleSelect="handleSelect"
+                      @handleSearch="searchTransactions"
                       column="col-3"
                       :is-required="false"
                       id="transactions"
@@ -275,6 +278,10 @@ export default {
 
     searchCustomers(event) {
         this.$store.dispatch("fetchCustomers", {search: event.target.value});
+    },
+
+    searchTransactions(event) {
+        this.$store.dispatch("fetchTransactions", {type: this.form.type, search: event.target.value});
     }
   },
   beforeMount() {
