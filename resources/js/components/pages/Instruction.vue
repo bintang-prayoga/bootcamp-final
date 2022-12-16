@@ -271,7 +271,6 @@ export default {
     },
 
     handleSelect(event, field = 'type') {
-        console.log(event);
       this.form[field] = event.target.attributes.data.value;
     },
 

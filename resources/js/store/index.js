@@ -32,7 +32,7 @@ export default new Vuex.Store({
                 }
                 commit("SET_VENDORS", data.data.data);
             } catch (error) {
-                alert(error);
+                commit("SET_VENDORS", {});
                 console.log(error);
             }
         },
@@ -46,7 +46,7 @@ export default new Vuex.Store({
                 }
                 commit("SET_INVOICETARGETS", data.data.data);
             } catch (error) {
-                alert(error);
+                commit("SET_INVOICETARGETS", {});
                 console.log(error);
             }
         },
@@ -60,7 +60,7 @@ export default new Vuex.Store({
                 }
                 commit("SET_CUSTOMERS", data.data.data);
             } catch (error) {
-                alert(error);
+                commit("SET_CUSTOMERS", {});
                 console.log(error);
             }
         },
@@ -78,7 +78,7 @@ export default new Vuex.Store({
                 });
                 commit("SET_TRANSACTIONS", data.data.data);
             } catch (error) {
-                alert(error);
+                commit("SET_TRANSACTIONS", {});
                 console.log(error);
             }
         },

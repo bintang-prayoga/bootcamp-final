@@ -39,6 +39,9 @@
                     {{ item }}
                   </a>
                 </li>
+                <li  v-if="(Array.isArray(items) && !items.length) || (typeof items != 'undefined') || Object.keys(items).length ">
+                    <p class="text-center m-2 items-none">No Data</p>
+                </li>
             </ul>
         </ul>
     </div>
@@ -53,7 +56,7 @@ export default {
     id: {type: String},
     label: {type: String},
     placeholder: {type: String},
-    items: {type: Array},
+    items: {type: Array|Object},
     field: {type: String},
     dataKey: {type: String},
     isRequired: {type: Boolean, default: true},
@@ -89,5 +92,8 @@ export default {
   .dropdown-items{
     list-style: none;
     max-height: 150px;
+  }
+  .items-none{
+    color: #808080b0;
   }
 </style>
