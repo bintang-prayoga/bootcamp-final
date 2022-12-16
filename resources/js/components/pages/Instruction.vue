@@ -84,9 +84,15 @@
                       </div>
                       <div class="row">
                         <Select
-                          @handleSelect="handleSelect" column="col-12" id="vendor-address"
-                          :items="vendorAddresses"
-                          :field="'vendor_address'" label="Vendor Address" placeholder="Enter Vendor Address"></Select>
+                          @handleSelect="handleSelect"
+                          @handleSearch="searchAddress"
+                          column="col-12"
+                          id="vendor-address"
+                          :items="addresses"
+                          :field="'vendor_address'"
+                          label="Vendor Address"
+                          placeholder="Enter Vendor Address">
+                        </Select>
                       </div>
                     </div>
                     <div class="col-2">
@@ -206,6 +212,7 @@ export default {
   data() {
     return {
       vendorAddresses: [],
+      addresses: []
     }
   },
   components: { Select, TableCost },
@@ -282,6 +289,21 @@ export default {
 
     searchTransactions(event) {
         this.$store.dispatch("fetchTransactions", {type: this.form.type, search: event.target.value});
+    },
+
+    searchAddress(event) {
+        if(this.vendorAddresses.length){
+            const search = event.target.value;
+            if(search != ''){
+                const regex = new RegExp(`.*${search}.*`, 'gm');
+                const addresses = this.vendorAddresses.filter((address) => {
+                    return address.match(regex)
+                });
+                this.addresses = addresses;
+            } else {
+                this.addresses = this.vendorAddresses
+            }
+        }
     }
   },
   beforeMount() {
@@ -314,6 +336,7 @@ export default {
             if(vendorIndex !== 0) {
                 this.form.vendor_address = '';
                 this.vendorAddresses = this.vendors[vendorIndex].addresses;
+                this.addresses = this.vendorAddresses;
             }
         }
       }
