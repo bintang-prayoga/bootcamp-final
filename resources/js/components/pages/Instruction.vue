@@ -73,6 +73,7 @@
                         <Select
                           @handleSelect="handleSelect"
                           @handleSearch="searchInvoices"
+                          create-placeholder="Add New Invoice"
                           column="col-3"
                           id="invoice-to"
                           :items="invoiceTargets"
@@ -86,6 +87,8 @@
                         <Select
                           @handleSelect="handleSelect"
                           @handleSearch="searchAddress"
+                          :create-placeholder="vendorExist ? 'Add New Vendor Address' : undefined"
+                          footer="Please choose Assigned Vendor to enable adding option"
                           column="col-12"
                           id="vendor-address"
                           :items="addresses"
@@ -229,6 +232,10 @@ export default {
       return Object.assign({}, this.form);
     },
 
+    vendorExist: function() {
+        return !!this.form.assigned_vendor ? true : false
+    },
+
     total: function() {
       if(!!this.form.costs){
         return {
@@ -330,7 +337,7 @@ export default {
         if(newValue.assigned_vendor != oldValue.assigned_vendor){
           let vendorIndex = 0
           if(!!newValue.assigned_vendor) {
-            vendorIndex = document.querySelector("a[data='" + this.form.assigned_vendor + "']").attributes[1].value ?? 0;
+            vendorIndex = document.querySelector("a[data='" + this.form.assigned_vendor + "']").getAttribute('data-index') ?? 0;
           }
             if(vendorIndex !== 0) {
                 this.form.vendor_address = '';
