@@ -9,6 +9,17 @@
       </p>
       <div class="container mt-5 p-0">
         <div>
+          <Modal
+            id="modal-invoice-to"
+            :header="{title: {value: 'Add Invoice Target'}}"
+            :body="[{
+              type: 'input-text',
+              field: 'name',
+              label: 'Invoice To',
+              placeholder: 'Invoice To'
+             }]"
+            @handleSave="postInvoice"
+          />
           <form v-on:submit.prevent="$store.dispatch('postFormInstruction', form)" method="post">
             <div class="form-group mt-5">
               <!-- Card Table -->
@@ -176,7 +187,7 @@
                       placeholder="Select Item">
                     </Select>
                     <div v-if="!!form.link_to" class="col-5 opacity-75 align-self-end" @click="removeLink">
-                      <button type="button" class="btn btn-danger text-white">
+                      <button type="button" class="btn btn-danger text-white mb-2">
                         Remove Link
                       </button>
                     </div>
@@ -209,7 +220,6 @@
 import Select from "../partials/Select.vue";
 import TableCost from '../partials/TableCost';
 import { mapGetters, mapActions } from "vuex";
-// import _ from 'lodash';
 
 export default {
   data() {
@@ -310,6 +320,10 @@ export default {
                 this.addresses = this.vendorAddresses
             }
         }
+    },
+
+    postInvoice(form) {
+        console.log(form)
     }
   },
   beforeMount() {

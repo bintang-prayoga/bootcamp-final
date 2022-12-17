@@ -44,7 +44,7 @@
                     </li>
                 </ul>
                 <div class="m-2" v-if="!!createPlaceholder">
-                    <button type="button" class="btn btn-outline-info w-100 border border-2 border-info border-opacity-50" data-bs-toggle="modal" :data-bs-target="`#modal-${id}}`">
+                    <button type="button" class="btn btn-outline-info w-100 border border-2 border-info border-opacity-50" data-bs-toggle="modal" :data-bs-target="`#modal-${id}`">
                         <span class="fs-4 text-capitalize">
                             <font-awesome-icon
                                 icon="fa-solid fa-plus"

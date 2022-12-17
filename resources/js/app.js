@@ -45,6 +45,10 @@ Vue.component(
     "Attachments",
     require("./components/partials/Attachments.vue").default
 );
+Vue.component(
+    "Modal",
+    require("./components/partials/Modal.vue").default
+);
 
 Vue.use(VueRouter);
 export const router = new VueRouter({
