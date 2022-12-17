@@ -54,7 +54,7 @@
                           Service Instruction
                         </span>
                       </button>
-                      <ul class="dropdown-menu" aria-labelledby="type">
+                      <ul class="dropdown-menu" style="min-width: auto;" aria-labelledby="type">
                         <li><a class="dropdown-item" data="LI" @click="(event) => {handleSelect(event)}">Logistic Instruction</a></li>
                         <li><a class="dropdown-item" data="SI" @click="(event) => {handleSelect(event)}">Service Instruction</a></li>
                       </ul>
