@@ -323,7 +323,7 @@ export default {
     },
 
     postInvoice(form) {
-        console.log(form)
+        this.$store.dispatch("postInvoiceTarget", {form: form});
     }
   },
   beforeMount() {
