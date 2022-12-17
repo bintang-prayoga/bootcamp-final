@@ -7,6 +7,7 @@
                     class="form-control"
                     placeholder="Enter Description"
                     v-model="$store.state.form.costs[index].description"
+                    required
                 />
             </th>
             <td>
@@ -16,10 +17,11 @@
                     class="form-control"
                     placeholder="Enter QTY"
                     v-model="$store.state.form.costs[index].qty"
+                    required
                 />
             </td>
             <td>
-                <select class="form-select fs-5" v-model="$store.state.form.costs[index].uom">
+                <select class="form-select fs-5" v-model="$store.state.form.costs[index].uom" required>
                     <option value="SHP">SHP</option>
                     <option value="BILL">BILL</option>
                     <option value="HRS">HRS</option>
@@ -37,6 +39,7 @@
                     class="form-control"
                     placeholder="Enter Unit Price"
                     v-model="$store.state.form.costs[index].unit_price"
+                    required
                 />
             </td>
             <td>
@@ -46,6 +49,7 @@
                     min="0"
                     max="100"
                     v-model="$store.state.form.costs[index].discount"
+                    required
                 />
             </td>
             <td>
@@ -55,6 +59,7 @@
                     min="0"
                     max="100"
                     v-model="$store.state.form.costs[index].vat"
+                    required
                 />
             </td>
             <td>
@@ -63,6 +68,7 @@
                     value="USD"
                     class="form-control"
                     disabled
+                    required
                 />
             </td>
             <td class="align-middle text-end">
@@ -71,6 +77,7 @@
                     class="form-control"
                     disabled
                     v-model="$store.state.form.costs[index].vat_ammount"
+                    required
                 />
                 {{ (value.vat_ammount).toFixed(2) }}
             </td>
@@ -80,6 +87,7 @@
                     class="form-control"
                     disabled
                     v-model="$store.state.form.costs[index].sub_total"
+                    required
                 />
                 {{ (value.sub_total).toFixed(2) }}
             </td>
@@ -89,11 +97,12 @@
                     class="form-control"
                     disabled
                     v-model="$store.state.form.costs[index].total"
+                    required
                 />
                 {{ (value.total).toFixed(2) }}
             </td>
             <td>
-                <select class="form-select fs-5" v-model="$store.state.form.costs[index].charge_to">
+                <select class="form-select fs-5" v-model="$store.state.form.costs[index].charge_to" required>
                 <option value="Customer">Customer</option>
                 <option value="Inosoft">Inosoft</option>
                 </select>
