@@ -152,6 +152,7 @@ export default new Vuex.Store({
             })
             .then((response) => {
                 console.log(response);
+                router.push(`/details/${response.data.data.id}`);
             })
             .catch((error) => {
                 console.log(error);
