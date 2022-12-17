@@ -167,6 +167,17 @@ export default new Vuex.Store({
                 console.log(response);
                 this.dispatch('fetchInvoiceTargets');
             })
+        },
+        async postVendorAddress({commit}, payload) {
+            axios.post(`/api/vendors/${payload.index}/addresses`, payload.form, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then((response) => {
+                console.log(response);
+                this.dispatch('fetchVendors');
+            })
         }
     },
     mutations: {

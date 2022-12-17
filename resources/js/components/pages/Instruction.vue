@@ -20,6 +20,17 @@
              }]"
             @handleSave="postInvoice"
           />
+          <Modal
+            id="modal-vendor-address"
+            :header="{title: {value: 'Add Vendor Address'}}"
+            :body="[{
+              type: 'input-text',
+              field: 'address',
+              label: 'Address',
+              placeholder: 'Enter Address'
+             }]"
+            @handleSave="postAddress"
+          />
           <form v-on:submit.prevent="$store.dispatch('postFormInstruction', form)" method="post">
             <div class="form-group mt-5">
               <!-- Card Table -->
@@ -224,8 +235,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      vendorAddresses: [],
-      addresses: []
+      selectedVendor: -1,
     }
   },
   components: { Select, TableCost },
@@ -240,6 +250,14 @@ export default {
 
     formCopy: function() {
       return Object.assign({}, this.form);
+    },
+
+    addresses: function() {
+        if(this.selectedVendor >= 0){
+            return this.vendors[this.selectedVendor].addresses
+        } else {
+            return [];
+        }
     },
 
     vendorExist: function() {
@@ -324,6 +342,10 @@ export default {
 
     postInvoice(form) {
         this.$store.dispatch("postInvoiceTarget", {form: form});
+    },
+
+    postAddress(form) {
+        this.$store.dispatch("postVendorAddress", {form: form, index: this.vendors[this.selectedVendor].id});
     }
   },
   beforeMount() {
@@ -355,8 +377,7 @@ export default {
           }
             if(vendorIndex !== 0) {
                 this.form.vendor_address = '';
-                this.vendorAddresses = this.vendors[vendorIndex].addresses;
-                this.addresses = this.vendorAddresses;
+                this.selectedVendor = vendorIndex;
             }
         }
       }

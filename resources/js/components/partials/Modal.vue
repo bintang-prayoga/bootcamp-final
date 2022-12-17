@@ -35,7 +35,7 @@
                 </div>
                 <div class="modal-footer border-top-0">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-info" @click="$emit('handleSave', form)">Submit</button>
+                    <button type="button" class="btn btn-info" @click="$emit('handleSave', form)" data-bs-dismiss="modal">Submit</button>
                 </div>
             </div>
         </div>
