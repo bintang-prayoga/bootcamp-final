@@ -4,6 +4,7 @@ import Instruction from "./components/pages/Instruction.vue";
 import Completed from "./components/pages/Completed.vue";
 import Login from "./components/pages/Login.vue";
 import Details from "./components/pages/Details.vue";
+import Edit from "./components/pages/Edit.vue";
 
 export const routes = [
     {
@@ -32,4 +33,9 @@ export const routes = [
         component: Details,
         props: true,
     },
+    {
+        path: "/instruction/:id/edit",
+        name: "Edit",
+        component: Edit,
+    }
 ];

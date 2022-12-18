@@ -127,42 +127,48 @@
         },
         computed: {
             costs: function() {
-              return JSON.stringify(this.$store.state.form.costs);
+              if(this.$store.state.form.costs ?? false){
+                return JSON.stringify(this.$store.state.form.costs);
+              } else {
+                return JSON.stringify([]);
+              }
             },
         },
         watch: {
             costs: {
                 deep:true,
                 handler(newValueSerialize, oldValueSerialize) {
-                    let newValue = JSON.parse(newValueSerialize);
-                    let oldValue = JSON.parse(oldValueSerialize);
+                    if(newValueSerialize != '[]' && oldValueSerialize != '[]') {
+                        let newValue = JSON.parse(newValueSerialize);
+                        let oldValue = JSON.parse(oldValueSerialize);
 
-                    for(let i = 0; i < newValue.length; i++) {
-                    if(!!newValue[i].qty && !!newValue[i].unit_price) {
-                        if(newValue[i].qty != oldValue[i].qty || newValue[i].unit_price != oldValue[i].unit_price || newValue[i].discount != oldValue[i].discount){
-                        let subTotal = newValue[i].qty * newValue[i].unit_price
-                        if(!!newValue[i].discount){
-                            subTotal -= subTotal * (newValue[i].discount/100);
+                        for(let i = 0; i < newValue.length; i++) {
+                        if(!!newValue[i].qty && !!newValue[i].unit_price) {
+                            if(newValue[i].qty != oldValue[i].qty || newValue[i].unit_price != oldValue[i].unit_price || newValue[i].discount != oldValue[i].discount){
+                            let subTotal = newValue[i].qty * newValue[i].unit_price
+                            if(!!newValue[i].discount){
+                                subTotal -= subTotal * (newValue[i].discount/100);
+                            }
+                            newValue[i]['sub_total'] = subTotal;
+                            }
                         }
-                        newValue[i]['sub_total'] = subTotal;
+
+                        if(!!newValue[i].sub_total){
+                            if(newValue[i].vat != oldValue[i].vat){
+                                let vatAmmount = (newValue[i].vat/100) * newValue[i].sub_total;
+                                newValue[i]['vat_ammount'] = vatAmmount;
+                            }
                         }
-                    }
 
-                    if(!!newValue[i].sub_total){
-                        if(newValue[i].vat != oldValue[i].vat){
-                            let vatAmmount = (newValue[i].vat/100) * newValue[i].sub_total;
-                            newValue[i]['vat_ammount'] = vatAmmount;
+                        if((!!newValue[i].sub_total && !!newValue[i].vat_ammount) && (newValue[i].sub_total != oldValue[i].sub_total || newValue[i].vat_ammount != oldValue[i].vat_ammount)) {
+                            let total = newValue[i].sub_total + newValue[i].vat_ammount;
+                            newValue[i]['total'] = total;
                         }
-                    }
+                        }
 
-                    if((!!newValue[i].sub_total && !!newValue[i].vat_ammount) && (newValue[i].sub_total != oldValue[i].sub_total || newValue[i].vat_ammount != oldValue[i].vat_ammount)) {
-                        let total = newValue[i].sub_total + newValue[i].vat_ammount;
-                        newValue[i]['total'] = total;
-                    }
-                    }
-
-                    if(JSON.stringify(this.$store.state.form.costs) != JSON.stringify(newValue)){
-                        this.$store.state.form.costs = newValue;
+                        if(JSON.stringify(this.$store.state.form.costs) != JSON.stringify(newValue)){
+                            this.$store.state.form.costs = newValue;
+                        }
                     }
                 }
             },

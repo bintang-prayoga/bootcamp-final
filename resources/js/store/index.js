@@ -84,7 +84,7 @@ export default new Vuex.Store({
         },
         async fetchDetails({ commit }, id) {
             try {
-                const data = await axios.get("api/instructions/" + id);
+                const data = await axios.get("/api/instructions/" + id);
                 commit("SET_DETAILS", data.data.data);
             } catch (error) {
                 alert(error);
@@ -110,6 +110,7 @@ export default new Vuex.Store({
                 attachments: [],
                 note: '',
                 link_to: '',
+                deleted_attachments: []
             };
 
             if(Object.keys(payload).length > 1) {
@@ -158,6 +159,42 @@ export default new Vuex.Store({
             })
             .catch((error) => {
                 console.log(error);
+            });
+        },
+        async updateInstruction({commit}, payload) {
+            const formData = new FormData();
+            for(const [key, value] of Object.entries(payload.form)){
+                if(Array.isArray(value)) {
+                    value.forEach((element, index) => {
+                        if(key == 'attachments'){
+                            if(typeof element !== 'string'){
+                                formData.append(`${key}[${index}]`, element);
+                            }
+                        } else if (key == 'deleted_attachments'){
+                            formData.append(`${key}[${index}]`, element);
+                        } else {
+                            for(const [subKey, subValue] of Object.entries(element)){
+                                formData.append(`${key}[${index}][${subKey}]`, subValue);
+                            }
+                        }
+                    })
+                } else {
+                    formData.append(key, value);
+                }
+            }
+
+            axios.post('/api/instructions/' + payload.id, formData, {
+                params: {
+                    '_method': 'put'
+                },
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then((response) => {
+                console.log(response);
+                commit('SET_FORM', {});
+                router.push(`/details/${response.data.data.id}`);
             });
         },
         async postInvoiceTarget({commit}, payload) {
