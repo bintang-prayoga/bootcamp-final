@@ -235,7 +235,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
-      selectedVendor: -1,
+        addresses: []
     }
   },
   components: { Select, TableCost },
@@ -250,14 +250,6 @@ export default {
 
     formCopy: function() {
       return Object.assign({}, this.form);
-    },
-
-    addresses: function() {
-        if(this.selectedVendor >= 0){
-            return this.vendors[this.selectedVendor].addresses
-        } else {
-            return [];
-        }
     },
 
     vendorExist: function() {
@@ -376,14 +368,13 @@ export default {
         }
 
         if(newValue.assigned_vendor != oldValue.assigned_vendor){
-          let vendorIndex = 0
           if(!!newValue.assigned_vendor) {
-            vendorIndex = document.querySelector("a[data='" + this.form.assigned_vendor + "']").getAttribute('data-index') ?? 0;
+            let vendorId = document.querySelector("a[data='" + this.form.assigned_vendor + "']").getAttribute('data-id') ?? 0;
+            this.form.vendor_address = '';
+            this.addresses = this.vendors.find((value) => {
+                return value.id == vendorId;
+            }).addresses;
           }
-            if(vendorIndex !== 0) {
-                this.form.vendor_address = '';
-                this.selectedVendor = vendorIndex;
-            }
         }
       }
     },

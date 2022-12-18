@@ -34,7 +34,7 @@
                       <a v-if="!!dataKey"
                         class="dropdown-item text-decoration-none"
                         :data="item[dataKey]"
-                        :data-index="index"
+                        :data-id="item.id"
                         @click="(event) => $emit('handleSelect', event, field)"
                       >
                         {{ item[dataKey] }}
