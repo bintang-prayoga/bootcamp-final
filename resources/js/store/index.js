@@ -153,6 +153,7 @@ export default new Vuex.Store({
             })
             .then((response) => {
                 console.log(response);
+                commit('SET_FORM', {});
                 router.push(`/details/${response.data.data.id}`);
             })
             .catch((error) => {
