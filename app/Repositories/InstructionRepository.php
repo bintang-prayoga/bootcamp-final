@@ -9,7 +9,7 @@ class InstructionRepository
     public function storeInstruction($instruction)
     {
         $dataSaved = [
-            'status' => 'In Progress',
+            'status' => $instruction['status'] ?? 'In Progress',
             'no' => $instruction['no'],
             'type' => $instruction['type'],
             'assigned_vendor' => $instruction['assigned_vendor'],
@@ -35,6 +35,14 @@ class InstructionRepository
             ],
             'cancellation' => null
         ];
+
+        if($instruction['status'] == 'Draft') {
+            $dataSaved['activity_notes'][] = [
+                'note' => 'Create Draft ' . ucwords($dataSaved['type']),
+                'performed_by' => auth()->user()->name ?? 'Ricko',
+                'date' => now()->format('d/m/y h:i A')
+            ];
+        }
 
         return Instruction::create($dataSaved);
     }
