@@ -213,7 +213,7 @@
                   <button type="button" class="btn btn-light me-3">
                     Cancel
                   </button>
-                  <button type="button" class="btn btn-secondary me-3">
+                  <button type="button" @click="saveAsDraft" class="btn btn-secondary me-3">
                     Save as Draft
                   </button>
                   <button type="submit" class="btn btn-info">Submit</button>
@@ -346,6 +346,11 @@ export default {
 
     postAddress(form) {
         this.$store.dispatch("postVendorAddress", {form: form, index: this.vendors[this.selectedVendor].id});
+    },
+
+    saveAsDraft() {
+        this.form.status = 'Draft';
+        this.$store.dispatch("postFormInstruction", this.form);
     }
   },
   beforeMount() {

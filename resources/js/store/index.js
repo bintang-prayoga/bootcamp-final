@@ -93,6 +93,7 @@ export default new Vuex.Store({
         },
         async setFormInstruction({commit}, payload) {
             let defaultForm = {
+                status: 'In Progress',
                 type: payload.type,
                 assigned_vendor: '',
                 attention_of: '',
