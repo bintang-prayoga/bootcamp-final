@@ -70,13 +70,15 @@ export default new Vuex.Store({
                     instructionType: payload.type
                 };
 
-                if(payload.search ?? false) queryParams['search'] = payload.search
+                if(queryParams.instructionType ?? false) {
+                    if(payload.search ?? false) queryParams['search'] = payload.search
 
-                const params = new URLSearchParams(queryParams);
-                const data = await axios.get('/api/transactions', {
-                    params: params
-                });
-                commit("SET_TRANSACTIONS", data.data.data);
+                    const params = new URLSearchParams(queryParams);
+                    const data = await axios.get('/api/transactions', {
+                        params: params
+                    });
+                    commit("SET_TRANSACTIONS", data.data.data);
+                }
             } catch (error) {
                 commit("SET_TRANSACTIONS", {});
                 console.log(error);

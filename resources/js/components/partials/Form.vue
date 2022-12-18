@@ -359,12 +359,14 @@
         deep:true,
         handler(newValue, oldValue) {
             if(newValue.type != oldValue.type) {
-                if(newValue.type === "SI") {
-                    this.form.link_to = ""
-                    this.$store.dispatch("fetchTransactions", {type: 'SI'});
-                } else if(newValue.type === "LI") {
-                    this.form.link_to = ""
-                    this.$store.dispatch("fetchTransactions", {type: 'LI'});
+                if(!this.disableType) {
+                    if(newValue.type === "SI") {
+                        this.form.link_to = ""
+                        this.$store.dispatch("fetchTransactions", {type: 'SI'});
+                    } else if(newValue.type === "LI") {
+                        this.form.link_to = ""
+                        this.$store.dispatch("fetchTransactions", {type: 'LI'});
+                    }
                 }
             }
         }
