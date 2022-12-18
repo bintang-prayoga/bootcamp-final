@@ -28,7 +28,7 @@ export const routes = [
         component: Login,
     },
     {
-        path: "/details/:id",
+        path: "/instructions/:id",
         name: "Details",
         component: Details,
         props: true,
