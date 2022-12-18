@@ -88,7 +88,7 @@ export default {
   data: function() {
     return {
         search: '',
-        searching: 1
+        searching: 0
     }
   },
   methods: {
