@@ -10,7 +10,7 @@
                 {{ placeholder }}
               </span>
             </button>
-            <ul class="dropdown-menu p-0" :id="id">
+            <ul class="dropdown-menu select p-0" :id="id">
                 <div class="input-group d-flex mb-2">
                     <span class="input-group-text border-end-0 bg-white" style="height: 34px" :id="'search-'+id">
                         <font-awesome-icon
@@ -21,7 +21,16 @@
                     <input class="form-control border-start-0 fs-4" style="height: 34px" type="text" placeholder="Search" aria-label="Search" @input="handleSearch" :aria-describedby="'search-'+id">
                 </div>
                 <ul class="list-group dropdown-items overflow-auto p-0 m-0">
-                    <li v-for="(item, index) in items">
+                    <li v-if="searching">
+                        <p class="text-center m-2 items-none">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Loading...
+                        </p>
+                    </li>
+                    <li v-else-if="!searching && (items == null || !items.length)">
+                        <p class="text-center m-2 items-none">No Data</p>
+                    </li>
+                    <li v-else v-for="(item, index) in items">
                       <a v-if="!!dataKey"
                         class="dropdown-item text-decoration-none"
                         :data="item[dataKey]"
@@ -38,9 +47,6 @@
                       >
                         {{ item }}
                       </a>
-                    </li>
-                    <li v-if="items == null || !items.length">
-                        <p class="text-center m-2 items-none">No Data</p>
                     </li>
                 </ul>
                 <div class="m-2" v-if="!!createPlaceholder">
@@ -81,7 +87,8 @@ export default {
   },
   data: function() {
     return {
-        search: ''
+        search: '',
+        searching: 1
     }
   },
   methods: {
@@ -90,11 +97,21 @@ export default {
             clearTimeout(window.TIME);
         }
 
+        this.searching = 1
+
         window.TIME = setTimeout(() => {
             this.$emit('handleSearch', event);
         }, 1000);
-    }
+    },
   },
+  watch: {
+    items: {
+        deep: true,
+        handler() {
+            this.searching = 0;
+        }
+    }
+  }
 };
 </script>
 
@@ -102,7 +119,7 @@ export default {
   .btn-group{
     width: 100%;
   }
-  .dropdown-menu{
+  .dropdown-menu .select{
     min-width: 100%;
   }
   .input-hidden{
