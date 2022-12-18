@@ -210,7 +210,7 @@
             <div class="form-group mt-5">
               <div class="card">
                 <div class="card-body d-flex justify-content-end">
-                  <button type="button" class="btn btn-light me-3">
+                  <button type="button" @click="() => {$router.push('/')}" class="btn btn-light me-3">
                     Cancel
                   </button>
                   <button type="button" @click="saveAsDraft" class="btn btn-secondary me-3">
