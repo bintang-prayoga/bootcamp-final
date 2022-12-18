@@ -1,10 +1,10 @@
 // import AppComp from './components/AppComp.vue';
 import Open from "./components/pages/Open.vue";
-import Instruction from "./components/pages/Instruction.vue";
 import Completed from "./components/pages/Completed.vue";
 import Login from "./components/pages/Login.vue";
 import Details from "./components/pages/Details.vue";
 import Edit from "./components/pages/Edit.vue";
+import Create from "./components/pages/Create.vue";
 
 export const routes = [
     {
@@ -13,9 +13,9 @@ export const routes = [
         component: Open,
     },
     {
-        path: "/instruction",
-        name: "Instruction",
-        component: Instruction,
+        path: "/instructions/create",
+        name: "Create",
+        component: Create,
     },
     {
         path: "/completed",
@@ -34,7 +34,7 @@ export const routes = [
         props: true,
     },
     {
-        path: "/instruction/:id/edit",
+        path: "/instructions/:id/edit",
         name: "Edit",
         component: Edit,
     }

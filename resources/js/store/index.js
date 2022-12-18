@@ -7,11 +7,11 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         form: {},
-        vendors: null,
-        invoiceTargets: null,
-        customers: null,
-        transactions: null,
-        details: null,
+        vendors: [],
+        invoiceTargets: [],
+        customers: [],
+        transactions: [],
+        details: [],
     },
     getters: {
         getVendors: (state) => state.vendors,
@@ -129,7 +129,7 @@ export default new Vuex.Store({
 
             commit('SET_FORM', defaultForm);
         },
-        async postFormInstruction({commit}, payload) {
+        async postInstruction({commit}, payload) {
             const formData = new FormData();
             for(const [key, value] of Object.entries(payload)){
                 if(Array.isArray(value)) {
@@ -209,7 +209,7 @@ export default new Vuex.Store({
             })
         },
         async postVendorAddress({commit}, payload) {
-            axios.post(`/api/vendors/${payload.index}/addresses`, payload.form, {
+            axios.post(`/api/vendors/${payload.id}/addresses`, payload.form, {
                 headers: {
                     'Accept': 'application/json'
                 }
