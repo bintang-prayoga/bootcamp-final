@@ -8,6 +8,9 @@ import {
     faInfoCircle,
     faPlus,
     faPaperclip,
+    faTrash,
+    faUser,
+    faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Vue from "vue";
@@ -15,7 +18,7 @@ import Vue from "vue";
 require("./bootstrap");
 
 window.Vue = require("vue").default;
-library.add(faBell, faTruck, faInfoCircle, faPlus, faPaperclip);
+library.add(faBell, faTruck, faInfoCircle, faPlus, faPaperclip, faTrash, faUser, faSearch);
 
 Vue.component("app-comp", require("./components/AppComp.vue").default);
 Vue.component("Navbar", require("./components/Layout/Navbar.vue").default);
@@ -31,20 +34,24 @@ Vue.component(
     require("./components/partials/ModalInvoice.vue").default
 );
 Vue.component(
-    "Dropdown",
-    require("./components/partials/Dropdown.vue").default
-);
-Vue.component(
-    "TextInput",
-    require("./components/partials/TextInput.vue").default
+    "Input",
+    require("./components/partials/Input.vue").default
 );
 Vue.component(
     "TableComp",
     require("./components/partials/TableComp.vue").default
 );
+Vue.component(
+    "Attachments",
+    require("./components/partials/Attachments.vue").default
+);
+Vue.component(
+    "Modal",
+    require("./components/partials/Modal.vue").default
+);
 
 Vue.use(VueRouter);
-const router = new VueRouter({
+export const router = new VueRouter({
     mode: "history",
     routes,
 });

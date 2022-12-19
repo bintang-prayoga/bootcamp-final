@@ -9,7 +9,7 @@ class InstructionRepository
     public function storeInstruction($instruction)
     {
         $dataSaved = [
-            'status' => 'In Progress',
+            'status' => $instruction['status'] ?? 'In Progress',
             'no' => $instruction['no'],
             'type' => $instruction['type'],
             'assigned_vendor' => $instruction['assigned_vendor'],
@@ -36,6 +36,14 @@ class InstructionRepository
             'cancellation' => null
         ];
 
+        if($instruction['status'] == 'Draft') {
+            $dataSaved['activity_notes'][] = [
+                'note' => 'Create Draft ' . ucwords($dataSaved['type']),
+                'performed_by' => auth()->user()->name ?? 'Ricko',
+                'date' => now()->format('d/m/y h:i A')
+            ];
+        }
+
         return Instruction::create($dataSaved);
     }
 
@@ -61,11 +69,19 @@ class InstructionRepository
     public function updateInstruction(Instruction $instruction, $newInstruction)
     {
         $activity_notes = $instruction->activity_notes;
-        $activity_notes[] = [
-            'note' => 'Edited 3rd Party Instruction',
-            'performed_by' => auth()->user()->name ?? 'Alfi',
-            'date' => now()->format('d/m/y h:i A')
-        ];
+        if($newInstruction->status ?? false && $newInstruction->status == 'Draft'){
+            $activity_notes[] = [
+                'note' => 'Create Draft ' . ucwords($instruction->type),
+                'performed_by' => auth()->user()->name ?? 'Ricko',
+                'date' => now()->format('d/m/y h:i A')
+            ];
+        } else {
+            $activity_notes[] = [
+                'note' => 'Edited 3rd Party Instruction',
+                'performed_by' => auth()->user()->name ?? 'Alfi',
+                'date' => now()->format('d/m/y h:i A')
+            ];
+        }
 
         $newInstruction['activity_notes'] = $activity_notes;
 

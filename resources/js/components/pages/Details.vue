@@ -25,7 +25,7 @@
           </div>
           <div class="col-2">
             <label class="text-muted fs-5 fw-light">Transfer No.</label>
-            <p class="fs-3 fw-bold">PPKN-2021-03</p>
+            <p class="fs-3 fw-bold">{{ this.details.link_to }}</p>
           </div>
           <div class="col-2">
             <label class="text-muted fs-5 fw-light">Customer</label>
@@ -101,9 +101,9 @@
                 <td>
                   <p>AED (Total)</p>
                 </td>
-                <td>{{ item.vat_amount }}</td>
-                <td>{{ item.sub_total }}</td>
-                <td>{{ item.total }}</td>
+                <td>{{ (item.vat_ammount).toFixed(2) }}</td>
+                <td>{{ (item.sub_total).toFixed(2) }}</td>
+                <td>{{ (item.total).toFixed(2) }}</td>
                 <td>{{ item.charge_to }}</td>
               </tr>
             </tbody>
@@ -231,13 +231,6 @@ export default {
         .get("/api/instructions/" + this.$route.params.id)
         .then((response) => {
           this.details = response.data.data;
-
-          this.details.costs.forEach((item) => {
-            item.vat_amount = item.vat_amount.toFixed(2);
-            item.sub_total = item.sub_total.toFixed(2);
-            item.total = item.total.toFixed(2);
-          });
-
           this.internal = response.data.data.internal;
         })
         .catch((error) => {

@@ -25,6 +25,9 @@ class InstructionRequest extends FormRequest
     public function rules()
     {
         $rules = [
+            'status' => [
+                Rule::in(['In Progress', 'Draft']),
+            ],
             'type' => [
                 'required',
                 Rule::in(['LI', 'SI'])
