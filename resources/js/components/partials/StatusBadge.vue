@@ -1,5 +1,5 @@
 <template>
-  <td>
+  <div class="mt-2">
     <span
       v-if="status === 'Completed'"
       class="py-2 px-3 bg-success text-white rounded-pill fs-5"
@@ -20,7 +20,7 @@
       class="py-2 px-3 bg-muted text-primary rounded-pill fs-5"
       ><font-awesome-icon icon="fa-solid fa-circle-info" />Draft</span
     >
-  </td>
+  </div>
 </template>
 <script>
 export default {

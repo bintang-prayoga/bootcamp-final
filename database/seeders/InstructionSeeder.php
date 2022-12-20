@@ -39,20 +39,20 @@ class InstructionSeeder extends Seeder
     {
         $users = ['Nando Septian', 'Bintang Prayoga', 'Ricko Haikal', 'Akmal Lutfhi', 'Daffa Pratama', 'Whisnumurty Galih'];
         for ($i = 0; $i < 50; $i++) {
-            $vendor = Vendor::raw(function($collection){
+            $vendor = Vendor::raw(function ($collection) {
                 return $this->inRandomOrder($collection);
             })
-            ->first();
+                ->first();
 
-            $customer = Customer::raw(function($collection){
+            $customer = Customer::raw(function ($collection) {
                 return $this->inRandomOrder($collection);
             })
-            ->first();
+                ->first();
 
-            $invoiceTarget = InvoiceTarget::raw(function($collection){
+            $invoiceTarget = InvoiceTarget::raw(function ($collection) {
                 return $this->inRandomOrder($collection);
             })
-            ->first();
+                ->first();
 
             $type = $this->faker->randomElement(['LI', 'SI']);
             $status = $this->faker->randomElement(['In Progress', 'Draft', 'Completed', 'Cancelled']);
@@ -95,9 +95,9 @@ class InstructionSeeder extends Seeder
             }
 
             $chance = rand(0, 1);
-            if($chance === 1){
-                if($type === 'LI'){
-                    $transaction = Transaction::raw(function($collection){
+            if ($chance === 1) {
+                if ($type === 'LI') {
+                    $transaction = Transaction::raw(function ($collection) {
                         $pipelines = [
                             ['$match' => [
                                 '$or' => [
@@ -110,12 +110,12 @@ class InstructionSeeder extends Seeder
 
                         return $this->inRandomOrder($collection, $pipelines);
                     })
-                    ->first();
+                        ->first();
                 } else {
-                    $transaction = Transaction::raw(function($collection){
+                    $transaction = Transaction::raw(function ($collection) {
                         return $this->inRandomOrder($collection);
                     })
-                    ->first();
+                        ->first();
                 }
 
                 $linkTo = $transaction->no;
@@ -128,7 +128,7 @@ class InstructionSeeder extends Seeder
                 'assigned_vendor' => $vendor->name,
                 'attention_of' => $this->faker->firstName(),
                 'quotation_no' => 'MITME-ADL-' . $this->faker->randomNumber(3, true),
-                'vendor_address' => $vendor->addresses[rand(0, 1)],
+                'vendor_address' => $vendor->addresses[mt_rand(0, 1)],
                 'invoice_to' => $invoiceTarget->name,
                 'customer' => $customer->name,
                 'customer_po_no' => 'PO' . $this->faker->randomNumber(2, true),
@@ -169,10 +169,10 @@ class InstructionSeeder extends Seeder
         $rows = [];
 
         for ($i = 0; $i < $count; $i++) {
-            $user = User::raw(function($collection) {
+            $user = User::raw(function ($collection) {
                 return $this->inRandomOrder($collection);
             })
-            ->first();
+                ->first();
 
             $rows[] = [
                 '_id' => new \MongoDB\BSON\ObjectId(),
@@ -193,7 +193,7 @@ class InstructionSeeder extends Seeder
         $total_barang = $qty * $price;
         $sub_total = $total_barang - ($total_barang * ($discount / 100));
         $vat = mt_rand(5, 10);
-        $vat_ammount = $sub_total * ($vat/100);
+        $vat_ammount = $sub_total * ($vat / 100);
 
         $rows = [];
         for ($i = 0; $i < $count; $i++) {

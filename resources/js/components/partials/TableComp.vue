@@ -58,7 +58,16 @@
             class="text-decoration-none ms-auto"
             :disabled="true"
           >
-            <font-awesome-icon icon="fa-solid fa-truck" class="text-muted" />
+            <font-awesome-icon
+              v-if="item.type === 'LI'"
+              icon="fa-solid fa-truck"
+              class="text-muted"
+            />
+            <font-awesome-icon
+              v-if="item.type === 'SI'"
+              icon="fa-solid fa-user"
+              class="text-muted"
+            />
             {{ item.type }}
           </router-link>
         </td>
@@ -132,7 +141,9 @@
           class="text-decoration-none mt-5"
           :disabled="true"
         >
-          <status-badge :status="item.status" />
+          <td>
+            <status-badge :status="item.status" />
+          </td>
         </router-link>
       </tr>
     </tbody>
