@@ -13,7 +13,7 @@ Project ini merupakan project kolaborasi dari inosoft bootcamp.
 -   [Nando Septian](https://github.com/NandoCraz) (Frontend)
 -   [Akmal Luthfi](https://www.github.com/akmalluthfi) (Backend)
 -   [Daffa Sayekti](https://github.com/daffasayekti) (Backend)
--   [Ricko Haikal](https://github.com/rhaikal) (Backend)
+-   [Ricko Haikal](https://github.com/rhaikal) (Backend & Frontend)
 -   [Whisnumurty Galih](https://github.com/whisnumurtyga) (Backend)
 
 ## Installation
@@ -66,6 +66,12 @@ Generate jwt secrect key
 
 ```bash
   php artisan jwt:secret
+```
+
+Build app
+
+```bash
+  npm run build
 ```
 
 Run the project
