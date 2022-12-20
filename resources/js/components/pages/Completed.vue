@@ -70,6 +70,10 @@ export default {
   },
   mounted() {
     this.getNextInstructions();
+    // check local storage token
+    if (!localStorage.getItem("token")) {
+      this.$router.push({ name: "Login" });
+    }
   },
   beforeMount() {
     this.getInitialInstructions();

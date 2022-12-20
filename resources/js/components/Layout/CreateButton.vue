@@ -13,14 +13,14 @@
       <li>
         <router-link
           class="dropdown-item"
-          :to="{ name: 'Instruction', params: { type: 'LI' } }"
+          :to="{ name: 'Create', params: { type: 'LI' } }"
           ><i class="fa-solid fa-truck"></i> Logistic Instruction</router-link
         >
       </li>
       <li>
         <router-link
           class="dropdown-item"
-          :to="{ name: 'Instruction', params: { type: 'SI' } }"
+          :to="{ name: 'Create', params: { type: 'SI' } }"
           ><i class="fa fa-user" aria-hidden="true"></i> Service
           Instruction</router-link
         >

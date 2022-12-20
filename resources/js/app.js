@@ -8,6 +8,14 @@ import {
     faInfoCircle,
     faPlus,
     faPaperclip,
+    faTrash,
+    faUser,
+    faSearch,
+    faEdit,
+    faFile,
+    faPaperPlane,
+    faBan,
+    faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Vue from "vue";
@@ -15,7 +23,26 @@ import Vue from "vue";
 require("./bootstrap");
 
 window.Vue = require("vue").default;
-library.add(faBell, faTruck, faInfoCircle, faPlus, faPaperclip);
+library.add(
+    faBell,
+    faTruck,
+    faInfoCircle,
+    faPlus,
+    faPaperclip,
+    faTrash,
+    faUser,
+    faSearch,
+    faEdit,
+    faFile,
+    faPaperPlane,
+    faBan,
+    faPen
+);
+
+let token = localStorage.getItem("token");
+if (token) {
+    window.axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+}
 
 Vue.component("app-comp", require("./components/AppComp.vue").default);
 Vue.component("Navbar", require("./components/Layout/Navbar.vue").default);
@@ -30,24 +57,41 @@ Vue.component(
     "ModalInvoice",
     require("./components/partials/ModalInvoice.vue").default
 );
-Vue.component(
-    "Dropdown",
-    require("./components/partials/Dropdown.vue").default
-);
-Vue.component(
-    "TextInput",
-    require("./components/partials/TextInput.vue").default
-);
+Vue.component("Input", require("./components/partials/Input.vue").default);
 Vue.component(
     "TableComp",
     require("./components/partials/TableComp.vue").default
 );
+Vue.component(
+    "Attachments",
+    require("./components/partials/Attachments.vue").default
+);
+Vue.component("Modal", require("./components/partials/Modal.vue").default);
 
 Vue.use(VueRouter);
-const router = new VueRouter({
+export const router = new VueRouter({
     mode: "history",
     routes,
 });
+
+// router.beforeEach((to, from, next) => {
+//     // you could define your own authentication logic with token
+//     let isAuthenticated = store.getters.isAuthenticated;
+
+//     // check route meta if it requires auth or not
+//     if (to.matched.some((record) => record.meta.requiresAuth)) {
+//         if (!isAuthenticated) {
+//             next({
+//                 path: "/login",
+//                 params: { nextUrl: to.fullPath },
+//             });
+//         } else {
+//             next();
+//         }
+//     } else {
+//         next();
+//     }
+// });
 
 const app = new Vue({
     el: "#app",
