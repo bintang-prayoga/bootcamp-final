@@ -11,6 +11,11 @@ import {
     faTrash,
     faUser,
     faSearch,
+    faEdit,
+    faFile,
+    faPaperPlane,
+    faBan,
+    faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Vue from "vue";
@@ -18,7 +23,21 @@ import Vue from "vue";
 require("./bootstrap");
 
 window.Vue = require("vue").default;
-library.add(faBell, faTruck, faInfoCircle, faPlus, faPaperclip, faTrash, faUser, faSearch);
+library.add(
+    faBell,
+    faTruck,
+    faInfoCircle,
+    faPlus,
+    faPaperclip,
+    faTrash,
+    faUser,
+    faSearch,
+    faEdit,
+    faFile,
+    faPaperPlane,
+    faBan,
+    faPen
+);
 
 let token = localStorage.getItem("token");
 if (token) {
@@ -38,10 +57,7 @@ Vue.component(
     "ModalInvoice",
     require("./components/partials/ModalInvoice.vue").default
 );
-Vue.component(
-    "Input",
-    require("./components/partials/Input.vue").default
-);
+Vue.component("Input", require("./components/partials/Input.vue").default);
 Vue.component(
     "TableComp",
     require("./components/partials/TableComp.vue").default
@@ -50,10 +66,7 @@ Vue.component(
     "Attachments",
     require("./components/partials/Attachments.vue").default
 );
-Vue.component(
-    "Modal",
-    require("./components/partials/Modal.vue").default
-);
+Vue.component("Modal", require("./components/partials/Modal.vue").default);
 
 Vue.use(VueRouter);
 export const router = new VueRouter({

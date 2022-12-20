@@ -30,7 +30,7 @@
                     <li v-else-if="!searching && (items == null || !items.length)">
                         <p class="text-center m-2 items-none">No Data</p>
                     </li>
-                    <li v-else v-for="(item, index) in items">
+                    <li v-else v-for="(item, index) in items" :key="index">
                       <a v-if="!!dataKey"
                         class="dropdown-item text-decoration-none"
                         :data="item[dataKey]"
@@ -70,7 +70,6 @@
   </template>
 
   <script>
-import { placeholder } from '@babel/types';
 
 export default {
   props: {

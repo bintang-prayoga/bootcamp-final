@@ -43,5 +43,9 @@ export const routes = [
         path: "/instructions/:id/edit",
         name: "Edit",
         component: Edit,
-    }
+    },
+    {
+        path: "*",
+        redirect: "/",
+    },
 ];
